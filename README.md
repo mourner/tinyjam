@@ -50,21 +50,21 @@ All `*.md` and `*.yml` files inside the working directory are interpreted as **d
 
 A template in this folder will have the contents available as:
 
-```json
-"posts": {
-  "01": {"title": "First post", "date": "2020-02-20", "body": ...},
+```js
+posts: {
+  "01": {title: "First post", date: "2020-02-20", body: ...},
   "02": ...
 },
-"config": {"foo": "bar"},
-"about": ...
+config: {foo: "bar"},
+about: ...
 ```
 
 A template in the `posts` folder will expose data relative to it, but you can access all the other data through the `root` property:
 
-```json
+```js
 "01": ...,
 "02": ...,
-"root": {"config": ..., "about": ...}
+root: {config: ..., about: ...}
 ```
 
 ### Templates
