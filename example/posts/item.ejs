@@ -1,7 +1,7 @@
 <%- include('../_header.ejs') -%>
 
-<h2><%= post.title %></h2>
-<%- post.body %>
-<p><em>Posted on <%= new Date(post.date).toDateString() %>.</em></p>
+<h2><%= item.title %></h2>
+<%- item.body %>
+<p><em>Posted on <%= new Date(item.date).toDateString() %>.</em></p>
 
 <%- include('../_footer.ejs') -%>
