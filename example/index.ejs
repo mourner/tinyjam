@@ -1,0 +1,7 @@
+<%- include('_header.ejs') -%>
+
+<% for (const {date, url, title} of Object.values(posts)) { -%>
+<h3><em><%= new Date(date).toDateString() %>:</em> <a href="<%= url %>"><%= title %></a></h3>
+<% } -%>
+
+<%- include('_footer.ejs') -%>
