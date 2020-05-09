@@ -27,11 +27,11 @@ _Experimental and a work in progress — there's no code yet, just scoping out t
 An example template:
 
 ```ejs
-<%- include('_header.ejs') -%>
+<%- include('_header.ejs') %>
 
-<% for (const {date, title, url} of Object.values(posts)) { -%>
+<% for (const {date, title, url} of Object.values(posts)) { %>
     <h3><%= date %>: <a href="<%= url %>"><%= title %></a></h3>
-<% } -%>
+<% } %>
 ```
 
 ## Concepts
@@ -80,10 +80,14 @@ root: {config: ..., about: ...}
 
 #### Why build yet another static site generator?
 
-I wanted to add some templating to my personal static websites like [my band's album page](https://rain.in.ua/son/en) (currently in pure HTML/CSS) to make them easier to maintain, but never found a static site generator that would just get out of the way, not requiring meticulous configuration, special folder structure, special tags in content files, or reading through hundreds of documentation pages, and be flexible enough to make multilingual websites without plugins and convoluted setup.
+I wanted to add some templating to my personal static websites like [my band's album page](https://rain.in.ua/son/en) (currently in pure HTML/CSS) to make them easier to maintain, but never found a static site generator that would be simple and unobtrusive enough for my liking — not requiring meticulous configuration, special folder structure, reading through hundreds of documentation pages, bringing in a ton of dependencies, or making you learn a new language; and be flexible enough to make multilingual websites without plugins and convoluted setup.
 
 Ideally, I would just rename some `html` files to `ejs`, move some content to Markdown files, add light templating and be done with it. So I decided to build my own minimal tool for this, but will be happy if anyone else finds it useful.
 
 #### Can you add \<feature X\>?
 
 Sorry — probably not, unless it fits the concept of a minimal, zero-configuration tool.
+
+#### Why EJS for templating, and can I use another templating system?
+
+EJS is also an extremely simple, minimal, zero-configuration system, and it allows you to use plain JavaScript inside templates, making it pretty powerful with almost no learning curve. No plans to support other template engines.
