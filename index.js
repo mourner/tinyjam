@@ -10,8 +10,13 @@ const yaml = require('js-yaml');
 
 module.exports = tinyjam;
 
-function tinyjam(src, dest) {
+function tinyjam(src, dest, options = {}) {
     fs.mkdirSync(dest, {recursive: true});
+
+    const markedOptions = {
+        breaks: options.breaks,
+        smartypants: options.smartypants
+    };
 
     const proto = {}; // TODO custom helpers?
     const root = Object.create(proto);
@@ -45,8 +50,10 @@ function tinyjam(src, dest) {
             if (relative(path, dest) === '') continue;
 
             const shortPath = relative(src, path);
+            const ext = extname(path);
+            const name = basename(path, ext);
 
-            if (file[0] === '.' || file === 'node_modules') {
+            if (file[0] === '.' || file === 'node_modules' || ext === '.lock' || name.endsWith('-lock')) {
                 console.log(`skipping \t${shortPath}`);
                 continue;
             }
@@ -60,9 +67,6 @@ function tinyjam(src, dest) {
                 continue;
             }
 
-            const ext = extname(path);
-            const name = basename(path, ext);
-
             if (ext === '.md') {
                 console.log(`reading \t${shortPath} (markdown)`);
                 const {attributes, body} = fm(fs.readFileSync(path, 'utf8'));
@@ -70,7 +74,7 @@ function tinyjam(src, dest) {
                 if (attributes.body !== undefined)
                     throw new Error('Can\'t use reserved keyword "body" as a front matter property.');
 
-                data[name] = {...attributes, body: marked(body)};
+                data[name] = {...attributes, body: marked(body, markedOptions)};
 
             } else if (ext === '.yml' || ext === '.yaml') {
                 console.log(`reading \t${shortPath} (yaml)`);

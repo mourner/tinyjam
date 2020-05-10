@@ -1,6 +1,6 @@
 # tinyjam
 
-A barebones, zero-configuration **static site generator** that deliberately has **no features**, an experiment in radical simplicity. Essentially a tiny glue between [EJS templates](https://ejs.co/) and [Markdown](https://spec.commonmark.org/current/) with freeform structure and convenient defaults, written in under 100 lines of JavaScript.
+A barebones, zero-configuration **static site generator** that deliberately has **no features**, an experiment in radical simplicity. Essentially a tiny glue between [EJS templates](https://ejs.co/) and [Markdown](https://spec.commonmark.org/current/) with freeform structure (enabling incremental adoption) and convenient defaults, written in under 100 lines of JavaScript.
 
 _Experimental and a work in progress._
 
