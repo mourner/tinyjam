@@ -42,6 +42,8 @@ function tinyjam(src, dest) {
 
         for (const file of files) {
             const path = join(dir, file);
+            if (relative(path, dest) === '') continue;
+
             const shortPath = relative(src, path);
 
             if (file[0] === '.' || file === 'node_modules') {
