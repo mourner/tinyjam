@@ -1,8 +1,8 @@
 # tinyjam
 
-A barebones, zero-configuration **static site generator** that deliberately has **no features**, an experiment in radical simplicity. Essentially a tiny glue between [EJS templates](https://ejs.co/) and [Markdown](https://spec.commonmark.org/current/) with freeform structure and convenient defaults, written in JavaScript.
+A barebones, zero-configuration **static site generator** that deliberately has **no features**, an experiment in radical simplicity. Essentially a tiny glue between [EJS templates](https://ejs.co/) and [Markdown](https://spec.commonmark.org/current/) with freeform structure and convenient defaults, written in under 100 lines of JavaScript.
 
-_Experimental and a work in progress — the code doesn't work yet._
+_Experimental and a work in progress._
 
 [![Simply Awesome](https://img.shields.io/badge/simply-awesome-brightgreen.svg)](https://github.com/mourner/projects)
 
@@ -29,8 +29,8 @@ An example template:
 ```ejs
 <%- include('_header.ejs') %>
 
-<% for (const {date, title, url} of Object.values(posts)) { %>
-    <h3><%= date %>: <a href="<%= url %>"><%= title %></a></h3>
+<% for (const [name, {date, title}] of Object.entries(posts)) { %>
+    <h3><%= date.toDateString() %>: <a href="posts/<%= name %>.html"><%= title %></a></h3>
 <% } %>
 ```
 

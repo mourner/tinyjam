@@ -2,7 +2,14 @@
 
 const tinyjam = require('./index.js');
 
-const src = process.argv[2];
-const dst = process.argv[3];
+if (process.argv.length < 4) {
+    console.log('Usage: tinyjam <source_dir> <output_dir>');
 
-tinyjam(src, dst);
+} else {
+    const src = process.argv[2];
+    const out = process.argv[3];
+
+    console.time('tinyjam');
+    tinyjam(src, out);
+    console.timeEnd('tinyjam');
+}

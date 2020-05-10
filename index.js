@@ -1,9 +1,9 @@
 'use strict';
 
-const ejs = require('ejs');
 const fs = require('fs');
 const {join, basename, dirname, extname, relative} = require('path');
 
+const ejs = require('ejs');
 const fm = require('front-matter');
 const marked = require('marked');
 const yaml = require('js-yaml');
@@ -11,6 +11,8 @@ const yaml = require('js-yaml');
 module.exports = tinyjam;
 
 function tinyjam(src, dest) {
+    fs.mkdirSync(dest, {recursive: true});
+
     const proto = {}; // TODO custom helpers?
     const root = Object.create(proto);
     proto.root = root;
@@ -19,18 +21,19 @@ function tinyjam(src, dest) {
 
     walk(src, root);
 
-    for (const {template, data: localData, path, isCollection} of templates) {
+    for (const {template, data: localData, dir, name, ext, isCollection} of templates) {
         if (isCollection) {
-            for (const key in localData) {
-                if (key === 'root') continue;
-                console.log(`rendering \t${path} (${key})`);
+            for (const key of Object.keys(localData)) {
+                const path = join(dir, key) + ext;
+                console.log(`rendering \t${path}`);
                 const out = template(localData[key]);
-                // TODO write file
+                fs.writeFileSync(join(dest, path), out);
             }
         } else {
+            const path = join(dir, name) + ext;
             console.log(`rendering \t${path}`);
             const out = template(localData);
-            // TODO write file
+            fs.writeFileSync(join(dest, path), out);
         }
     }
 
@@ -40,12 +43,18 @@ function tinyjam(src, dest) {
         for (const file of files) {
             const path = join(dir, file);
             const shortPath = relative(src, path);
+
+            if (file[0] === '.' || file === 'node_modules') {
+                console.log(`skipping \t${shortPath}`);
+                continue;
+            }
+
             const stats = fs.lstatSync(path);
 
             if (stats.isDirectory()) {
+                fs.mkdirSync(join(dest, shortPath), {recursive: true});
                 data[file] = Object.create(proto);
                 walk(path, data[file]);
-                // TODO create output dir
                 continue;
             }
 
@@ -78,6 +87,9 @@ function tinyjam(src, dest) {
                 const isCollection = name === 'item';
                 templates.push({
                     template,
+                    dir: dirname(shortPath),
+                    name,
+                    ext: outExt,
                     path: join(dirname(shortPath), name) + outExt,
                     data,
                     isCollection
@@ -85,7 +97,7 @@ function tinyjam(src, dest) {
 
             } else {
                 console.log(`copying \t${shortPath} (static)`);
-                // TODO copy over the rest
+                fs.copyFileSync(path, join(dest, shortPath));
             }
         }
     }
