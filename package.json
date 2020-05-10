@@ -2,15 +2,31 @@
   "name": "tinyjam",
   "description": "A zero-configuration static site generator that deliberately has no features",
   "main": "index.js",
+  "bin": {
+    "tinyjam": "./cli.js"
+  },
   "version": "0.0.0",
+  "author": "Vladimir Agafonkin",
+  "license": "ISC",
   "dependencies": {
     "ejs": "^3.1.2",
-    "fast-glob": "^3.2.2",
+    "front-matter": "^3.1.0",
+    "js-yaml": "^3.13.1",
     "marked": "^1.0.0"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "eslint": "^7.0.0",
+    "eslint-config-mourner": "^3.0.0"
+  },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "eslint *.js"
+  },
+  "eslintConfig": {
+    "extends": "mourner",
+    "parserOptions": {"ecmaVersion": 2018},
+    "rules": {
+      "no-process-exit": 0
+    }
   },
   "keywords": [
     "static",
@@ -18,7 +34,5 @@
     "generator",
     "markdown",
     "ejs"
-  ],
-  "author": "Vladimir Agafonkin",
-  "license": "ISC"
+  ]
 }

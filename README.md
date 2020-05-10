@@ -2,7 +2,7 @@
 
 A barebones, zero-configuration **static site generator** that deliberately has **no features**, an experiment in radical simplicity. Essentially a tiny glue between [EJS templates](https://ejs.co/) and [Markdown](https://spec.commonmark.org/current/) with freeform structure and convenient defaults, written in JavaScript.
 
-_Experimental and a work in progress — there's no code yet, just scoping out the concepts._
+_Experimental and a work in progress — the code doesn't work yet._
 
 [![Simply Awesome](https://img.shields.io/badge/simply-awesome-brightgreen.svg)](https://github.com/mourner/projects)
 
@@ -61,19 +61,13 @@ config: {foo: "bar"},
 about: ...
 ```
 
-A template in the `posts` folder will expose data relative to it, but you can access all the other data through the `root` property:
-
-```js
-"01": ...,
-"02": ...,
-root: {config: ..., about: ...}
-```
+Although a template is evaluated with the data alongside it (inside the same directory), you can access all of the project's data through the `root` property (e.g. a template inside `posts` could access `root.config`).
 
 ### Templates
 
 - `*.ejs` files are treated as [EJS templates](https://ejs.co/) to be rendered with the collected data. EJS is a simple templating system where you can use plain JavaScript code.
 - `<filename>.ejs` files are rendered as `<filename>.html`, except `_<filename>.ejs` which are skipped (to be used as includes).
-- If there's a file named `item.ejs` in a folder, all _data files_ in this folder (e.g. `<filename>.md`) are rendered with this template as `<filename>.html`, with the variable `item` representing each file's data.
+- If there's a file named `item.ejs` in a folder, all _data files_ in this folder (e.g. `<filename>.md`) are rendered with this template as `<filename>.html` with the corresponding file's data.
 - Templates are rendered as `html` by default, but you can use other extensions, e.g. `main.css.ejs` will be rendered as `main.css`.
 
 ## FAQ
@@ -90,4 +84,4 @@ Sorry — probably not, unless it fits the concept of a minimal, zero-configurat
 
 #### Why EJS for templating, and can I use another templating system?
 
-EJS is also an extremely simple, minimal, zero-configuration system, and it allows you to use plain JavaScript inside templates, making it pretty powerful with almost no learning curve. No plans to support other template engines.
+EJS is also an extremely simple, minimal system, and it allows you to use plain JavaScript for templates, making it pretty powerful with almost no learning curve. No plans to support other template engines.
