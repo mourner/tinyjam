@@ -85,3 +85,13 @@ Sorry — probably not, unless it fits the concept of a minimal, zero-configurat
 #### Why EJS for templating, and can I use another templating system?
 
 EJS is also an extremely simple, minimal system, and it allows you to use plain JavaScript for templates, making it pretty powerful with almost no learning curve. No plans to support other template engines.
+
+#### How do you make a multilingual website?
+
+**Tinyjam** gives you freedom to approach this in many different ways, but here's an example:
+
+```ejs
+en.ejs: <%- include('_content.ejs', {lang: 'en'}) %>
+fr.ejs: <%- include('_content.ejs', {lang: 'fr'}) %>
+_content.ejs: <%= content[lang].body %> (use either content/en.md or content/fr.md)
+```
