@@ -1,8 +1,10 @@
 'use strict';
 
 const tinyjam = require('./index.js');
+const {version} = require('./package.json');
 
 if (process.argv.length < 4) {
+    console.log(`tinyjam v${version}`);
     console.log('Usage: tinyjam <source_dir> <output_dir>');
 
 } else {
