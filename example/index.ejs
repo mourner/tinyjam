@@ -1,6 +1,10 @@
 <%- include('_header.ejs') -%>
 
-<ul><% for (const [name, {date, title}] of Object.entries(posts)) { -%>
+<h1>tinyjam blog example</h1>
+
+<% const names = Object.keys(posts).sort((a, b) => posts[b].date - posts[a].date); %>
+
+<ul><% for (const name of names) { const {date, title} = posts[name]; -%>
     <li><%= date.toDateString() %>: <a href="posts/<%= name %>.html"><%= title %></a></li>
 <% } -%></ul>
 

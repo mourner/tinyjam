@@ -34,13 +34,13 @@ An example template:
 <% } %>
 ```
 
-## Concepts
+## Documentation
 
 **Tinyjam** doesn't impose any folder structure, processing any data files (`*.md` and `*.yml`) and templates (`*.ejs`) it encounters and copying over anything else.
 
 ### Data files
 
-All `*.md` and `*.yml` files inside the working directory are interpreted as **data**, available for any templates all at once as JSON objects. For example, given the following folder structure:
+All `*.md` and `*.yml` files inside the working directory are interpreted as **data**, available for any templates all at once as JavaScript objects. For example, given the following folder structure:
 
 ```
 ├── posts
@@ -54,14 +54,14 @@ A template in this folder will have the contents available as:
 
 ```js
 posts: {
-  "01": {title: "First post", date: "2020-02-20", body: ...},
+  "01": {title: "First post", date: new Date("2020-02-20"), body: "Hello world"},
   "02": ...
 },
 config: {foo: "bar"},
 about: ...
 ```
 
-Although a template is evaluated with the data alongside it (inside the same directory), you can access all of the project's data through the `root` property (e.g. a template inside `posts` could access `root.config`).
+A template is evaluated with the data alongside it (inside the same directory). Additionally, you can access all of the project's data through the `root` property (e.g. a template inside `posts` could access `root.config`).
 
 ### Templates
 
