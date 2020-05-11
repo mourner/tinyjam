@@ -6,10 +6,12 @@ const {join} = require('path');
 
 const tinyjam = require('../index.js');
 
-test('example', (t) => {
-    const inputPath = join(__dirname, '../example');
-    const expectedPath = join(__dirname, 'fixtures/example_output');
-    const actualPath = join(__dirname, 'fixtures/example_actual');
+test('example', t => testDir(t, '../../example', 'example_output', 'example_actual'));
+
+function testDir(t, input, expected, actual) {
+    const inputPath = join(__dirname, 'fixtures', input);
+    const expectedPath = join(__dirname, 'fixtures', expected);
+    const actualPath = join(__dirname, 'fixtures', actual);
 
     rimraf.sync(actualPath);
 
@@ -25,4 +27,4 @@ test('example', (t) => {
     }
 
     t.end();
-});
+}

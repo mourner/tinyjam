@@ -16,7 +16,7 @@ if (process.argv.length < 4) {
 
     const src = process.argv[2];
     const out = process.argv[3];
-    tinyjam(src, out);
+    tinyjam(src, out, {log: true});
 
     const elapsed = performance.now() - start;
     console.log(`\nDone in ${elapsed.toLocaleString()}ms.`);

@@ -10,19 +10,25 @@ const yaml = require('js-yaml');
 
 module.exports = tinyjam;
 
-function tinyjam(src, dest, options = {}) {
-    fs.mkdirSync(dest, {recursive: true}); // make sure destination exists
+const defaultOptions = {
+    log: false,
+    breaks: false,
+    smartypants: false
+};
 
-    const markedOptions = { // Markdown renderer options
-        breaks: options.breaks,
-        smartypants: options.smartypants
-    };
+function tinyjam(src, dest, options = {}) {
+    options = Object.assign({}, defaultOptions, options);
+
+    // Markdown renderer options
+    const markedOptions = {breaks: options.breaks, smartypants: options.smartypants};
 
     const proto = {};
     const root = createCtx('.'); // root data object
     proto.root = root; // add data root access to all leaf nodes
 
     const templates = [];
+
+    fs.mkdirSync(dest, {recursive: true}); // make sure destination exists
 
     walk(src, root); // process files, collect data and templates to render
 
@@ -37,9 +43,13 @@ function tinyjam(src, dest, options = {}) {
         }
     }
 
+    function log(msg) {
+        if (options.log) console.log(msg);
+    }
+
     function render(template, data, dir, name, ext) {
         const path = join(dir, name) + ext;
-        console.log(`render  ${path}`);
+        log(`render  ${path}`);
         fs.writeFileSync(join(dest, path), template(data));
     }
 
@@ -68,7 +78,7 @@ function tinyjam(src, dest, options = {}) {
             const rootPath = relative(dirname(shortPath), '');
 
             if (file[0] === '.' || file === 'node_modules' || ext === '.lock' || name.endsWith('-lock')) {
-                console.log(`skip    ${shortPath}`);
+                log(`skip    ${shortPath}`);
                 continue;
             }
 
@@ -82,7 +92,7 @@ function tinyjam(src, dest, options = {}) {
             }
 
             if (ext === '.md') {
-                console.log(`read    ${shortPath}`);
+                log(`read    ${shortPath}`);
                 const {attributes, body} = fm(fs.readFileSync(path, 'utf8'));
 
                 if (attributes.body !== undefined)
@@ -91,15 +101,15 @@ function tinyjam(src, dest, options = {}) {
                 data[name] = createCtx(rootPath, {...attributes, body: marked(body, markedOptions)});
 
             } else if (ext === '.yml' || ext === '.yaml') {
-                console.log(`read    ${shortPath}`);
+                log(`read    ${shortPath}`);
                 data[name] = createCtx(rootPath, yaml.safeLoad(fs.readFileSync(path, 'utf8')));
 
             } else if (ext === '.ejs') {
                 if (name[0] === '_') { // skip includes
-                    console.log(`skip    ${shortPath}`);
+                    log(`skip    ${shortPath}`);
                     continue;
                 }
-                console.log(`compile ${shortPath}`);
+                log(`compile ${shortPath}`);
                 templates.push({
                     data,
                     name,
@@ -110,7 +120,7 @@ function tinyjam(src, dest, options = {}) {
                 });
 
             } else {
-                console.log(`copy    ${shortPath}`);
+                log(`copy    ${shortPath}`);
                 fs.copyFileSync(path, join(dest, shortPath));
             }
         }
