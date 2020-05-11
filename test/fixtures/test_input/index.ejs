@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html><head><title><%= about.title %></title></head><body>
+<pre><code>
+about: <%= JSON.stringify(about) %>
+config: <%= JSON.stringify(config) %>
+root: <%= root === about.root && root === config.root && root === foo.root && root === foo.bar.root %>
+foo: <%= foo.foo.is_foo %> <%= Object.keys(foo).join() %>
+bar: <%= foo.bar.bar.is_bar %> <%= Object.keys(foo.bar).join() %>
+rootPath: <%= rootPath %>
+foo.rootPath: <%= foo.rootPath %>
+bar.rootPath: <%= foo.bar.rootPath %>
+bar.bar.rootPath: <%= foo.bar.bar.rootPath %>
+</code></pre>
+</body></html>
