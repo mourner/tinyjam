@@ -11,21 +11,22 @@ const yaml = require('js-yaml');
 module.exports = tinyjam;
 
 function tinyjam(src, dest, options = {}) {
-    fs.mkdirSync(dest, {recursive: true});
+    fs.mkdirSync(dest, {recursive: true}); // make sure destination exists
 
-    const markedOptions = {
+    const markedOptions = { // Markdown renderer options
         breaks: options.breaks,
         smartypants: options.smartypants
     };
 
     const proto = {};
-    const root = createCtx('.');
-    proto.root = root;
+    const root = createCtx('.'); // root data object
+    proto.root = root; // add data root access to all leaf nodes
 
     const templates = [];
 
-    walk(src, root);
+    walk(src, root); // process files, collect data and templates to render
 
+    // render templates; we do it later to make sure all data is collected first
     for (const {template, data, dir, name, ext, isCollection} of templates) {
         if (isCollection) {
             for (const key of Object.keys(data)) {
@@ -38,12 +39,14 @@ function tinyjam(src, dest, options = {}) {
 
     function render(template, data, dir, name, ext) {
         const path = join(dir, name) + ext;
-        console.log(`rendering \t${path}`);
-        const out = template(data);
-        fs.writeFileSync(join(dest, path), out);
+        console.log(`render  ${path}`);
+        fs.writeFileSync(join(dest, path), template(data));
     }
 
+    // create an object to be used as evalulation data in a template
     function createCtx(rootPath, properties) {
+        // prototype magic to make sure all data objects have access to root/rootPath
+        // in templates and includes, and without them being returned in Object.keys
         const ctxProto = Object.create(proto);
         ctxProto.rootPath = rootPath;
         const ctx = Object.create(ctxProto);
@@ -51,6 +54,7 @@ function tinyjam(src, dest, options = {}) {
         return ctx;
     }
 
+    // recursively walk through and process files inside the source directory
     function walk(dir, data) {
         const files = fs.readdirSync(dir);
 
@@ -64,7 +68,7 @@ function tinyjam(src, dest, options = {}) {
             const rootPath = relative(dirname(shortPath), '');
 
             if (file[0] === '.' || file === 'node_modules' || ext === '.lock' || name.endsWith('-lock')) {
-                console.log(`skipping \t${shortPath}`);
+                console.log(`skip    ${shortPath}`);
                 continue;
             }
 
@@ -78,7 +82,7 @@ function tinyjam(src, dest, options = {}) {
             }
 
             if (ext === '.md') {
-                console.log(`reading \t${shortPath} (markdown)`);
+                console.log(`read    ${shortPath}`);
                 const {attributes, body} = fm(fs.readFileSync(path, 'utf8'));
 
                 if (attributes.body !== undefined)
@@ -87,31 +91,26 @@ function tinyjam(src, dest, options = {}) {
                 data[name] = createCtx(rootPath, {...attributes, body: marked(body, markedOptions)});
 
             } else if (ext === '.yml' || ext === '.yaml') {
-                console.log(`reading \t${shortPath} (yaml)`);
+                console.log(`read    ${shortPath}`);
                 data[name] = createCtx(rootPath, yaml.safeLoad(fs.readFileSync(path, 'utf8')));
 
             } else if (ext === '.ejs') {
-                if (name[0] === '_') {
-                    console.log(`skipping \t${shortPath} (include)`);
-                    continue; // skip includes
+                if (name[0] === '_') { // skip includes
+                    console.log(`skip    ${shortPath}`);
+                    continue;
                 }
-
-                console.log(`compiling \t${shortPath} (template)`);
-                const outExt = extname(name) ? '' : '.html';
-                const src = fs.readFileSync(path, 'utf8');
-                const template = ejs.compile(src, {filename: path});
-                const isCollection = name === 'item';
+                console.log(`compile ${shortPath}`);
                 templates.push({
-                    template,
-                    dir: dirname(shortPath),
-                    name,
-                    ext: outExt,
                     data,
-                    isCollection
+                    name,
+                    template: ejs.compile(fs.readFileSync(path, 'utf8'), {filename: path}),
+                    isCollection: name === 'item',
+                    dir: dirname(shortPath),
+                    ext: extname(name) ? '' : '.html'
                 });
 
             } else {
-                console.log(`copying \t${shortPath} (static)`);
+                console.log(`copy    ${shortPath}`);
                 fs.copyFileSync(path, join(dest, shortPath));
             }
         }
