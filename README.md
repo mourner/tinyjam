@@ -34,7 +34,7 @@ An example template:
 <% } %>
 ```
 
-Browse the [full example](example/).
+Browse the [full example](example/) and the [generated output](test/fixtures/example_output/).
 
 ## Usage
 

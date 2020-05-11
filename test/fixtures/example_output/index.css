@@ -1,0 +1,7 @@
+body {
+    font: 16px/1.5 sans-serif;
+}
+.container {
+    max-width: 600px;
+    margin: 0 auto;
+}

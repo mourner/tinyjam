@@ -15,11 +15,15 @@
     "marked": "^1.0.0"
   },
   "devDependencies": {
+    "dir-compare": "^2.3.0",
     "eslint": "^7.0.0",
-    "eslint-config-mourner": "^3.0.0"
+    "eslint-config-mourner": "^3.0.0",
+    "rimraf": "^3.0.2",
+    "tape": "^5.0.0"
   },
   "scripts": {
-    "test": "eslint *.js"
+    "pretest": "eslint *.js test/test.js",
+    "test": "node test/test.js"
   },
   "eslintConfig": {
     "extends": "mourner",
