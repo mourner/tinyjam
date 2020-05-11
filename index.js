@@ -18,28 +18,37 @@ function tinyjam(src, dest, options = {}) {
         smartypants: options.smartypants
     };
 
-    const proto = {}; // TODO custom helpers?
-    const root = Object.create(proto);
+    const proto = {};
+    const root = createCtx('.');
     proto.root = root;
 
     const templates = [];
 
     walk(src, root);
 
-    for (const {template, data: localData, dir, name, ext, isCollection} of templates) {
+    for (const {template, data, dir, name, ext, isCollection} of templates) {
         if (isCollection) {
-            for (const key of Object.keys(localData)) {
-                const path = join(dir, key) + ext;
-                console.log(`rendering \t${path}`);
-                const out = template(localData[key]);
-                fs.writeFileSync(join(dest, path), out);
+            for (const key of Object.keys(data)) {
+                render(template, data[key], dir, key, ext);
             }
         } else {
-            const path = join(dir, name) + ext;
-            console.log(`rendering \t${path}`);
-            const out = template(localData);
-            fs.writeFileSync(join(dest, path), out);
+            render(template, data, dir, name, ext);
         }
+    }
+
+    function render(template, data, dir, name, ext) {
+        const path = join(dir, name) + ext;
+        console.log(`rendering \t${path}`);
+        const out = template(data);
+        fs.writeFileSync(join(dest, path), out);
+    }
+
+    function createCtx(rootPath, properties) {
+        const ctxProto = Object.create(proto);
+        ctxProto.rootPath = rootPath;
+        const ctx = Object.create(ctxProto);
+        if (properties) Object.assign(ctx, properties);
+        return ctx;
     }
 
     function walk(dir, data) {
@@ -52,6 +61,7 @@ function tinyjam(src, dest, options = {}) {
             const shortPath = relative(src, path);
             const ext = extname(path);
             const name = basename(path, ext);
+            const rootPath = relative(dirname(shortPath), '');
 
             if (file[0] === '.' || file === 'node_modules' || ext === '.lock' || name.endsWith('-lock')) {
                 console.log(`skipping \t${shortPath}`);
@@ -62,7 +72,7 @@ function tinyjam(src, dest, options = {}) {
 
             if (stats.isDirectory()) {
                 fs.mkdirSync(join(dest, shortPath), {recursive: true});
-                data[file] = Object.create(proto);
+                data[file] = createCtx(join(rootPath, '..'));
                 walk(path, data[file]);
                 continue;
             }
@@ -74,11 +84,11 @@ function tinyjam(src, dest, options = {}) {
                 if (attributes.body !== undefined)
                     throw new Error('Can\'t use reserved keyword "body" as a front matter property.');
 
-                data[name] = {...attributes, body: marked(body, markedOptions)};
+                data[name] = createCtx(rootPath, {...attributes, body: marked(body, markedOptions)});
 
             } else if (ext === '.yml' || ext === '.yaml') {
                 console.log(`reading \t${shortPath} (yaml)`);
-                data[name] = yaml.safeLoad(fs.readFileSync(path, 'utf8'));
+                data[name] = createCtx(rootPath, yaml.safeLoad(fs.readFileSync(path, 'utf8')));
 
             } else if (ext === '.ejs') {
                 if (name[0] === '_') {
@@ -96,7 +106,6 @@ function tinyjam(src, dest, options = {}) {
                     dir: dirname(shortPath),
                     name,
                     ext: outExt,
-                    path: join(dirname(shortPath), name) + outExt,
                     data,
                     isCollection
                 });

@@ -1,11 +1,12 @@
 <%- include('_header.ejs') -%>
 
-<h1>tinyjam blog example</h1>
+<h1>tinyjam example</h1>
 
-<% const names = Object.keys(posts).sort((a, b) => posts[b].date - posts[a].date); %>
-
-<ul><% for (const name of names) { const {date, title} = posts[name]; -%>
+<% const names = Object.keys(posts).sort((a, b) => posts[b].date - posts[a].date); -%>
+<ul>
+<% for (const name of names) { const {date, title} = posts[name]; -%>
     <li><%= date.toDateString() %>: <a href="posts/<%= name %>.html"><%= title %></a></li>
-<% } -%></ul>
+<% } -%>
+</ul>
 
 <%- include('_footer.ejs') -%>
