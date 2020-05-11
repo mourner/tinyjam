@@ -36,6 +36,13 @@ An example template:
 
 Browse the [full example](example/).
 
+## Usage
+
+```bash
+npm install -g tinyjam
+tinyjam source_dir output_dir
+```
+
 ## Documentation
 
 **Tinyjam** doesn't impose any folder structure, processing any data files (`*.md` and `*.yml`) and templates (`*.ejs`) it encounters and copying over anything else.

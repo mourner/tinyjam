@@ -25,11 +25,15 @@
     "extends": "mourner",
     "parserOptions": {"ecmaVersion": 2018}
   },
+  "files": [
+    "cli.js"
+  ],
   "keywords": [
     "static",
     "site",
     "generator",
     "markdown",
-    "ejs"
+    "ejs",
+    "templates"
   ]
 }
