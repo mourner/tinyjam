@@ -5,7 +5,7 @@
   "bin": {
     "tinyjam": "./cli.js"
   },
-  "version": "0.0.0",
+  "version": "0.0.1",
   "author": "Vladimir Agafonkin",
   "license": "ISC",
   "dependencies": {
@@ -23,7 +23,9 @@
   },
   "eslintConfig": {
     "extends": "mourner",
-    "parserOptions": {"ecmaVersion": 2018}
+    "parserOptions": {
+      "ecmaVersion": 2018
+    }
   },
   "files": [
     "cli.js"
