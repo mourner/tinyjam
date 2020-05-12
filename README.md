@@ -101,12 +101,14 @@ In addition to the collected data, templates have access to the following proper
 Install with NPM to use `tinyjam` as a CLI: `npm install -g tinyjam`. Usage:
 
 ```
-tinyjam source_dir output_dir [--breaks] [--smartypants] [--silent]
+tinyjam source_dir [output_dir] [--breaks] [--smartypants] [--silent]
 ```
 
 - `--breaks`: Add single line breaks as `<br>` in Markdown.
 - `--smartypants`: Convert quotes, dashes and ellipses in Markdown to typographic equivalents.
 - `--silent`: Run silently (unless there's an error).
+
+If `output_dir` is not provided, it's assumed equal to `source_dir`. This is useful for incrementally converting static sites without changing deployment folders.
 
 ### Node.js API
 

@@ -17,7 +17,7 @@ const defaultOptions = {
     highlight: null
 };
 
-function tinyjam(src, dest, options = {}) {
+function tinyjam(src, dest = src, options = {}) {
     options = Object.assign({}, defaultOptions, options);
 
     // Markdown renderer options
@@ -78,6 +78,7 @@ function tinyjam(src, dest, options = {}) {
             const ext = extname(path);
             const name = basename(path, ext);
             const rootPath = relative(dirname(shortPath), '');
+            const destPath = join(dest, shortPath);
 
             if (file[0] === '.' || file === 'node_modules' || ext === '.lock' || name.endsWith('-lock')) {
                 log(`skip    ${shortPath}`);
@@ -87,7 +88,7 @@ function tinyjam(src, dest, options = {}) {
             const stats = fs.lstatSync(path);
 
             if (stats.isDirectory()) {
-                fs.mkdirSync(join(dest, shortPath), {recursive: true});
+                fs.mkdirSync(destPath, {recursive: true});
                 data[file] = createCtx(join(rootPath, '..'));
                 walk(path, data[file]);
                 continue;
@@ -121,9 +122,9 @@ function tinyjam(src, dest, options = {}) {
                     ext: extname(name) ? '' : '.html'
                 });
 
-            } else {
+            } else if (path !== destPath) {
                 log(`copy    ${shortPath}`);
-                fs.copyFileSync(path, join(dest, shortPath));
+                fs.copyFileSync(path, destPath);
             }
         }
     }

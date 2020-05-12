@@ -5,9 +5,9 @@ const tinyjam = require('./index.js');
 const {version} = require('./package.json');
 const {performance} = require('perf_hooks');
 
-if (process.argv.length < 4) {
+if (process.argv.length < 3) {
     console.log(`tinyjam v${version}`);
-    console.log('usage: tinyjam source_dir output_dir [--breaks] [--smartypants] [--silent]');
+    console.log('usage: tinyjam source_dir [output_dir] [--breaks] [--smartypants] [--silent]');
 
 } else {
     const [src, out] = process.argv.slice(2).filter(s => !s.startsWith('--'));
