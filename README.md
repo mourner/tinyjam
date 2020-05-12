@@ -2,7 +2,7 @@
 
 <p align="center"><img src="https://raw.githubusercontent.com/mourner/tinyjam/master/tinyjam.png" width="262">
 
-A bare-bones, zero-configuration **static site generator** that deliberately has **no features**, an experiment in radical simplicity. Essentially a tiny, elegant glue between [EJS templates](https://ejs.co/) and [Markdown](https://spec.commonmark.org/current/) with freeform structure (enabling incremental adoption) and convenient defaults, written in under 120 lines of JavaScript. _Experimental and a work in progress._
+A bare-bones, zero-configuration **static site generator** that deliberately has **no features**, an experiment in radical simplicity. Essentially a tiny, elegant glue between [EJS templates](https://ejs.co/) and [Markdown](https://spec.commonmark.org/current/) with freeform structure (enabling incremental adoption) and convenient defaults, written in under 120 lines of JavaScript.
 
 [![Build Status](https://github.com/mourner/tinyjam/workflows/Node/badge.svg?branch=master)](https://github.com/mourner/tinyjam/actions)
 [![Install Size](https://packagephobia.now.sh/badge?p=tinyjam)](https://packagephobia.now.sh/result?p=tinyjam)
@@ -36,7 +36,7 @@ An example template:
 <% } %>
 ```
 
-Browse the [full example](example/) and the [generated output](test/fixtures/example_output/).
+Browse the [full example](example/) and see the [generated website](https://mourner.github.io/tinyjam/test/fixtures/example_output/).
 
 ## Usage
 
@@ -115,3 +115,7 @@ en.ejs: <%- include('_content.ejs', {lang: 'en'}) %>
 fr.ejs: <%- include('_content.ejs', {lang: 'fr'}) %>
 _content.ejs: <%= content[lang].body %> (use either content/en.md or content/fr.md)
 ```
+
+### How do I add pagination?
+
+At the moment, you can't. It's not a great UI pattern anyway — make an archive page with links to all content instead.

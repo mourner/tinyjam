@@ -1,7 +1,21 @@
 body {
+    background: white;
+    color: black;
     font: 16px/1.5 sans-serif;
 }
 .container {
     max-width: 600px;
-    margin: 0 auto;
+    margin: 40px auto;
+}
+img.logo {
+    float: right;
+}
+a {
+    color: #0076DD;
+}
+hr {
+    border: 0;
+    height: 1px;
+    background: #ccc;
+    margin-top: 30px;
 }

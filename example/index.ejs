@@ -1,5 +1,7 @@
 <%- include('_header.ejs') -%>
 
+<img class="logo" src="https://raw.githubusercontent.com/mourner/tinyjam/master/tinyjam.png" width="131">
+
 <h1><%= data.title %></h1>
 
 <% for (const name of Object.keys(posts).reverse()) { const {date, title, body} = posts[name]; -%>
