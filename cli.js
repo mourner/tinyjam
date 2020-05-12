@@ -5,19 +5,21 @@ const tinyjam = require('./index.js');
 const {version} = require('./package.json');
 const {performance} = require('perf_hooks');
 
-console.log(`tinyjam v${version}`);
-
 if (process.argv.length < 4) {
-    console.log('usage: tinyjam <source_dir> <output_dir>');
+    console.log(`tinyjam v${version}`);
+    console.log('usage: tinyjam source_dir output_dir [--breaks] [--smartypants]');
 
 } else {
-    console.log('');
+    const [src, out] = process.argv.slice(2).filter(s => !s.startsWith('--'));
+    const breaks = process.argv.includes('--breaks');
+    const smartypants = process.argv.includes('--smartypants');
+    const log = !process.argv.includes('--silent');
+
+    if (log) console.log(`tinyjam v${version}\n`);
+
     const start = performance.now();
-
-    const src = process.argv[2];
-    const out = process.argv[3];
-    tinyjam(src, out, {log: true});
-
+    tinyjam(src, out, {log, breaks, smartypants});
     const elapsed = performance.now() - start;
-    console.log(`\nDone in ${elapsed.toLocaleString()}ms.`);
+
+    if (log) console.log(`\nDone in ${elapsed.toLocaleString()}ms.`);
 }

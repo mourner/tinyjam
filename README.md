@@ -103,6 +103,14 @@ tinyjam(sourceDir, outputDir, {
 });
 ````
 
+### CLI options
+
+You can pass the following options to the `tinyjam` CLI:
+
+- `--breaks`: Add single line breaks as `<br>` in Markdown.
+- `--smartypants`: Convert quotes, dashes and ellipses in Markdown to typographic equivalents.
+- `--silent`: Run silently (unless there's an error).
+
 ## FAQ
 
 #### Why build yet another static site generator?
@@ -115,7 +123,7 @@ Ideally, I would just rename some `html` files to `ejs`, move some content to Ma
 
 Sorry — probably not, unless it fits the concept of a minimal, zero-configuration tool.
 
-#### How fast is tinyjam?
+#### How fast is Tinyjam?
 
 Pretty fast. I didn't see a point in benchmarking because most of the time is spent parsing Markdown/YAML and rendering EJS anyway, but corresponding dependencies (`marked`, `js-yaml`, `ejs`) are very well optimized.
 
@@ -147,7 +155,7 @@ Do all the preprocessing in the source directory prior to running `tinyjam`.
 
 #### How do I add code syntax highlighting?
 
-Here's an example using the `tinyjam` API with `highlight.js`:
+Here's an example using the `tinyjam` API with [highlight.js](https://highlightjs.org/):
 
 ```js
 const tinyjam = require('tinyjam');
