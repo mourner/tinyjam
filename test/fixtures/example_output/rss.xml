@@ -1,20 +1,23 @@
 <?xml version="1.0"?>
-<rss version="2.0">
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
 <channel>
 
 <title>tinyjam example</title>
-<link>https://mourner.github.io/tinyjam/test/fixtures/example_output/</link>
+<link>https://mourner.github.io/tinyjam/test/fixtures/example_output</link>
 <description>A minimal blog template for tinyjam.</description>
+<atom:link href="https://mourner.github.io/tinyjam/test/fixtures/example_output/rss.xml" rel="self" type="application/rss+xml" />
 
 <item>
      <title>Another post</title>
      <link>https://mourner.github.io/tinyjam/test/fixtures/example_output/posts/02.html</link>
+     <guid>https://mourner.github.io/tinyjam/test/fixtures/example_output/posts/02.html</guid>
      <description><![CDATA[<p>Cras a dolor sit amet ipsum fermentum tincidunt ut vel est. Duis mattis tortor eget diam tempus, nec facilisis urna sollicitudin. Etiam neque quam, pulvinar in dapibus in, malesuada at ante. Suspendisse sed risus blandit, dapibus felis a, porttitor ligula. Suspendisse tempus nec tortor quis molestie.</p>
 <p>Aliquam quis quam eget dui aliquam tincidunt. Cras scelerisque, augue nec iaculis finibus, nunc tortor tempus risus, id volutpat ex lacus non tortor. Nam a diam ex. Etiam sodales nulla risus, dignissim vulputate nibh finibus at. Aenean ultrices lectus nec sem consequat feugiat. Phasellus molestie viverra efficitur.</p>]]></description>
 </item>
 <item>
      <title>Hello tinyjam</title>
      <link>https://mourner.github.io/tinyjam/test/fixtures/example_output/posts/01.html</link>
+     <guid>https://mourner.github.io/tinyjam/test/fixtures/example_output/posts/01.html</guid>
      <description><![CDATA[<p>Hello world! Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer at odio consequat, suscipit elit at, gravida est. Duis sodales ornare diam, eget tristique libero porttitor sed. Donec id orci nunc. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.</p>
 <p>Ut vel semper diam. Donec posuere nulla eu ante tincidunt, at porttitor lorem posuere. Fusce posuere, mauris in pulvinar gravida, velit enim tempor eros, sed ornare est turpis id nisi. Integer mattis at ligula vel fermentum. Mauris sagittis nulla sit amet metus viverra ultricies. Praesent a ultrices nibh. Suspendisse potenti.</p>]]></description>
 </item>

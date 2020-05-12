@@ -1,15 +1,17 @@
 <?xml version="1.0"?>
-<rss version="2.0">
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
 <channel>
 
 <title><%= data.title %></title>
 <link><%= data.link %></link>
 <description>A minimal blog template for tinyjam.</description>
+<atom:link href="<%= data.link %>/rss.xml" rel="self" type="application/rss+xml" />
 
 <% for (const name of Object.keys(posts).reverse()) { const {title, body} = posts[name]; -%>
 <item>
      <title><%= title %></title>
-     <link><%= data.link %>posts/<%= name %>.html</link>
+     <link><%= data.link %>/posts/<%= name %>.html</link>
+     <guid><%= data.link %>/posts/<%= name %>.html</guid>
      <description><![CDATA[<%- body.trim() %>]]></description>
 </item>
 <% } -%>
