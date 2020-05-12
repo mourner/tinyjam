@@ -83,8 +83,8 @@ about: {body: "This is an awesome blog about me."}
 
 In addition to the collected data, templates have access to the following properties:
 
-- `rootPath` is a relative path to the root of the project — useful as a prefix for links in includes (e.g. `<%= rootPath %>/index.css`).
-- `root` references all of the project's data, which is useful for accessing data outside of the current template's folder.
+- `rootPath` is a relative path to the root of the project — useful as a prefix for links in includes as they may be used on different nesting levels (e.g. `<%= rootPath %>/index.css`).
+- `root` references all of the project's data, which is useful for accessing data in includes or outside of the current template's folder.
 
 ## FAQ
 
