@@ -8,6 +8,15 @@ A bare-bones, zero-configuration **static site generator** that deliberately has
 [![Install Size](https://packagephobia.now.sh/badge?p=tinyjam)](https://packagephobia.now.sh/result?p=tinyjam)
 [![Simply Awesome](https://img.shields.io/badge/simply-awesome-brightgreen.svg)](https://github.com/mourner/projects)
 
+- [Example](#example)
+- [Documentation](#documentation)
+    - [Getting started](#getting-started)
+    - [Data files](#data-files)
+    - [Templates](#templates)
+    - [Command line](#command-line)
+    - [Node.js API](#nodejs-api)
+- [FAQ](#faq)
+
 ## Example
 
 ```bash
@@ -43,11 +52,8 @@ Browse the [full example](example/) and see the [generated website](https://mour
 ### Getting started
 
 ```bash
-npm install -g tinyjam
-tinyjam source_dir output_dir
+npx tinyjam source_dir output_dir
 ```
-
-### Folders
 
 **Tinyjam** doesn't impose any folder structure, processing any data files (`*.md` and `*.yml`) and templates (`*.ejs`) it encounters and copying over anything else.
 
@@ -87,10 +93,22 @@ Markdown is rendered according to the [GitHub Flavored Markdown](https://github.
 
 In addition to the collected data, templates have access to the following properties:
 
-- `rootPath` is a relative path to the root of the project — useful as a prefix for links in includes as they may be used on different nesting levels (e.g. `<%= rootPath %>/index.css`).
+- `rootPath` is a relative path to the root of the project — useful as a prefix for links in includes as they may be used on different nesting levels (e.g. `<%= rootPath %>/index.css`).
 - `root` references all of the project's data, which is useful for accessing data in includes or outside of the current template's folder.
 
-### Using as a Node.js library
+### Command line
+
+Install with NPM to use `tinyjam` as a CLI: `npm install -g tinyjam`. Usage:
+
+```
+tinyjam source_dir output_dir [--breaks] [--smartypants] [--silent]
+```
+
+- `--breaks`: Add single line breaks as `<br>` in Markdown.
+- `--smartypants`: Convert quotes, dashes and ellipses in Markdown to typographic equivalents.
+- `--silent`: Run silently (unless there's an error).
+
+### Node.js API
 
 ```js
 const tinyjam = require('tinyjam');
@@ -102,14 +120,6 @@ tinyjam(sourceDir, outputDir, {
     highlight: null     // a code highlighting function: (code, lang) => html
 });
 ````
-
-### CLI options
-
-You can pass the following options to the `tinyjam` CLI:
-
-- `--breaks`: Add single line breaks as `<br>` in Markdown.
-- `--smartypants`: Convert quotes, dashes and ellipses in Markdown to typographic equivalents.
-- `--silent`: Run silently (unless there's an error).
 
 ## FAQ
 
