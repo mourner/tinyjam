@@ -13,14 +13,16 @@ module.exports = tinyjam;
 const defaultOptions = {
     log: false,
     breaks: false,
-    smartypants: false
+    smartypants: false,
+    highlight: null
 };
 
 function tinyjam(src, dest, options = {}) {
     options = Object.assign({}, defaultOptions, options);
 
     // Markdown renderer options
-    const markedOptions = {breaks: options.breaks, smartypants: options.smartypants};
+    const {breaks, smartypants, highlight} = options;
+    const markedOptions = {breaks, smartypants, highlight, smartLists: true};
 
     const proto = {};
     const root = createCtx('.'); // root data object
