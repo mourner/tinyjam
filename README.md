@@ -2,7 +2,7 @@
 
 <p align="center"><img src="https://raw.githubusercontent.com/mourner/tinyjam/master/tinyjam.png" width="262">
 
-A bare-bones, zero-configuration **static site generator** that deliberately has **no features**, an experiment in radical simplicity. Essentially a tiny, elegant glue between [EJS templates](https://ejs.co/) and [Markdown](https://github.github.com/gfm/) with freeform structure (enabling incremental adoption) and convenient defaults, written in under 120 lines of JavaScript.
+A bare-bones, zero-configuration **static site generator** that deliberately has **no features**, an experiment in radical simplicity. Essentially a tiny, elegant glue between [EJS templates](https://github.com/mourner/yeahjs) and [Markdown](https://github.github.com/gfm/) with freeform structure (enabling incremental adoption) and convenient defaults, written in under 120 lines of JavaScript.
 
 [![Build Status](https://github.com/mourner/tinyjam/workflows/Node/badge.svg?branch=master)](https://github.com/mourner/tinyjam/actions)
 [![Install Size](https://packagephobia.now.sh/badge?p=tinyjam)](https://packagephobia.now.sh/result?p=tinyjam)
@@ -84,7 +84,7 @@ Markdown is rendered according to the [GitHub Flavored Markdown](https://github.
 
 ### Templates
 
-**Tinyjam** uses [EJS](https://ejs.co/), a templating system based on JavaScript, so it's both powerful and easy to learn. All `*.ejs` files it encounters are rendered with the collected data in the following way:
+**Tinyjam** uses EJS (through [yeahjs](https://github.com/mourner/yeahjs), a fast EJS subset), a templating system where you can use plain JavaScript, so it's both powerful and easy to learn. All `*.ejs` files it encounters are rendered with the collected data in the following way:
 
 - `<filename>.ejs` files are rendered as `<filename>.html`.
 - `item.ejs` has a special meaning: all _data files_ in the same folder (e.g. `<filename>.md`) are rendered with this template as `<filename>.html` with the corresponding file's data.

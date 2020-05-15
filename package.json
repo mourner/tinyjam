@@ -9,10 +9,10 @@
   "author": "Vladimir Agafonkin",
   "license": "ISC",
   "dependencies": {
-    "ejs": "^3.1.2",
     "front-matter": "^3.1.0",
     "js-yaml": "^3.13.1",
-    "marked": "^1.0.0"
+    "marked": "^1.0.0",
+    "yeahjs": "^0.2.0"
   },
   "devDependencies": {
     "dir-compare": "^2.3.0",

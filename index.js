@@ -3,7 +3,7 @@
 const fs = require('fs');
 const {join, basename, dirname, extname, relative} = require('path');
 
-const ejs = require('ejs');
+const {compile} = require('yeahjs');
 const fm = require('front-matter');
 const marked = require('marked');
 const yaml = require('js-yaml');
@@ -29,19 +29,20 @@ function tinyjam(src, dest = src, options = {}) {
     proto.root = root; // add data root access to all leaf nodes
 
     const templates = [];
+    const cache = {}; // include cache
 
     fs.mkdirSync(dest, {recursive: true}); // make sure destination exists
 
     walk(src, root); // process files, collect data and templates to render
 
     // render templates; we do it later to make sure all data is collected first
-    for (const {template, data, dir, name, ext, isCollection} of templates) {
+    for (const {ejs, path, data, dir, name, ext, isCollection} of templates) {
         if (isCollection) {
             for (const key of Object.keys(data)) {
-                render(template, data[key], dir, key, ext);
+                render(ejs, path, data[key], dir, key, ext);
             }
         } else {
-            render(template, data, dir, name, ext);
+            render(ejs, path, data, dir, name, ext);
         }
     }
 
@@ -49,19 +50,29 @@ function tinyjam(src, dest = src, options = {}) {
         if (options.log) console.log(msg);
     }
 
-    function render(template, data, dir, name, ext) {
+    function render(ejs, filename, data, dir, name, ext) {
         const path = join(dir, name) + ext;
+        const template = compile(ejs, {
+            locals: Object.keys(data).concat(['root', 'rootPath']),
+            filename, read, resolve, cache
+        });
         log(`render  ${path}`);
         fs.writeFileSync(join(dest, path), template(data));
+    }
+
+    function resolve(parent, filename) {
+        return join(dirname(parent), filename);
+    }
+
+    function read(filename) {
+        return fs.readFileSync(filename, 'utf8');
     }
 
     // create an object to be used as evalulation data in a template
     function createCtx(rootPath, properties) {
         // prototype magic to make sure all data objects have access to root/rootPath
-        // in templates and includes, and without them being returned in Object.keys
-        const ctxProto = Object.create(proto);
-        ctxProto.rootPath = rootPath;
-        const ctx = Object.create(ctxProto);
+        // in templates and includes without them being enumerable
+        const ctx = Object.create(proto, {rootPath: {value: rootPath, enumerable: false}});
         if (properties) Object.assign(ctx, properties);
         return ctx;
     }
@@ -116,7 +127,8 @@ function tinyjam(src, dest = src, options = {}) {
                 templates.push({
                     data,
                     name,
-                    template: ejs.compile(fs.readFileSync(path, 'utf8'), {filename: path}),
+                    path,
+                    ejs: fs.readFileSync(path, 'utf8'),
                     isCollection: name === 'item',
                     dir: dirname(shortPath),
                     ext: extname(name) ? '' : '.html'
