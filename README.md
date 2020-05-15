@@ -127,7 +127,9 @@ tinyjam(sourceDir, outputDir, {
 
 #### Why build yet another static site generator?
 
-I wanted to add some templating to my personal static websites like [my band's album page](https://rain.in.ua/son/en) (currently in pure HTML/CSS/JS) to make them easier to maintain, but never found a static site generator that would be simple and unobtrusive enough for my liking — not requiring meticulous configuration, special folder structure, reading through hundreds of documentation pages, bringing in a ton of dependencies, or making you learn a new language; and be flexible enough to make multilingual websites without plugins and convoluted setup.
+I wanted to add some templating to my personal static websites to make them easier to maintain (e.g. [my band's album page](https://rain.in.ua/son/en), which is pure HTML/CSS/JS), but never found a static site generator that would be simple and unobtrusive enough for my liking.
+
+A tool I envisioned would not involve meticulous configuration, special folder structure, reading through hundreds of documentation pages, bringing in a ton of dependencies, or making you learn a new language. At the same time, it would be flexible enough to make multilingual websites without plugins and convoluted setup.
 
 Ideally, I would just rename some `html` files to `ejs`, move some content to Markdown files, add light templating and be done with it. So I decided to build my own minimal tool for this, but will be happy if anyone else finds it useful.
 
@@ -137,11 +139,11 @@ Sorry — probably not, unless it fits the concept of a minimal, zero-configurat
 
 #### How fast is Tinyjam?
 
-Pretty fast. I didn't see a point in benchmarking because most of the time is spent parsing Markdown/YAML and rendering EJS anyway, but corresponding dependencies (`marked`, `js-yaml`, `ejs`) are very well optimized.
+Pretty fast. I didn't see a point in benchmarking because most of the time is spent parsing Markdown/YAML and rendering EJS anyway, but corresponding dependencies (`marked`, `js-yaml`, `yeahjs`) are very well optimized.
 
 #### Why EJS for templating, and can I use another templating system?
 
-EJS is also an extremely simple, minimal system, and it allows you to use plain JavaScript for templates, making it pretty powerful with almost no learning curve. No plans to support other template engines.
+EJS is also an extremely simple, minimal system, and it allows you to use plain JavaScript for templates, making it pretty powerful with almost no learning curve. To make it even faster, I crafted my own implementation ([yeahjs](https://github.com/mourner/yeahjs)). No plans to support other template engines.
 
 #### How do I make a reactive single-page app with dynamic routing, hydration, bundle splitting and service worker caching?
 
