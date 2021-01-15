@@ -113,7 +113,7 @@ If `output_dir` is not provided, it's assumed equal to `source_dir`. This is use
 ### Node.js API
 
 ```js
-const tinyjam = require('tinyjam');
+import tinyjam from 'tinyjam';
 
 tinyjam(sourceDir, outputDir, {
     log: false,         // log the progress (like in the CLI)
@@ -122,6 +122,8 @@ tinyjam(sourceDir, outputDir, {
     highlight: null     // a code highlighting function: (code, lang) => html
 });
 ````
+
+Note that the project only supports Node v12.17+.
 
 ## FAQ
 
@@ -172,8 +174,8 @@ Do all the preprocessing in the source directory prior to running `tinyjam`.
 Here's an example using the `tinyjam` API with [highlight.js](https://highlightjs.org/):
 
 ```js
-const tinyjam = require('tinyjam');
-const {highlight} = require('highlight.js');
+import tinyjam from 'tinyjam';
+import {highlight} from 'highlight.js';
 
 tinyjam(sourceDir, outputDir, {
     highlight: (code, lang) => highlight(lang, code).value

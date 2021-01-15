@@ -3,6 +3,7 @@
   "description": "A zero-configuration static site generator that deliberately has no features",
   "main": "index.js",
   "type": "module",
+  "exports": "./index.js",
   "bin": {
     "tinyjam": "./cli.js"
   },
