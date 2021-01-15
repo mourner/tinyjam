@@ -1,9 +1,10 @@
 #!/usr/bin/env node
-'use strict';
 
-const tinyjam = require('./index.js');
-const {version} = require('./package.json');
-const {performance} = require('perf_hooks');
+import tinyjam from './index.js';
+import {readFileSync} from 'fs';
+import {performance} from 'perf_hooks';
+
+const version = JSON.parse(readFileSync(new URL('./package.json', import.meta.url))).version;
 
 if (process.argv.length < 3) {
     console.log(`tinyjam v${version}`);

@@ -1,14 +1,10 @@
-'use strict';
+import fs from 'fs';
+import {join, basename, dirname, extname, relative} from 'path';
 
-const fs = require('fs');
-const {join, basename, dirname, extname, relative} = require('path');
-
-const {compile} = require('yeahjs');
-const fm = require('front-matter');
-const marked = require('marked');
-const yaml = require('js-yaml');
-
-module.exports = tinyjam;
+import {compile} from 'yeahjs';
+import fm from 'front-matter';
+import marked from 'marked';
+import yaml from 'js-yaml';
 
 const defaultOptions = {
     log: false,
@@ -17,7 +13,7 @@ const defaultOptions = {
     highlight: null
 };
 
-function tinyjam(src, dest = src, options = {}) {
+export default function tinyjam(src, dest = src, options = {}) {
     options = Object.assign({}, defaultOptions, options);
 
     // Markdown renderer options
@@ -116,7 +112,7 @@ function tinyjam(src, dest = src, options = {}) {
 
             } else if (ext === '.yml' || ext === '.yaml') {
                 log(`read    ${shortPath}`);
-                data[name] = createCtx(rootPath, yaml.safeLoad(fs.readFileSync(path, 'utf8')));
+                data[name] = createCtx(rootPath, yaml.load(fs.readFileSync(path, 'utf8')));
 
             } else if (ext === '.ejs') {
                 if (name[0] === '_') { // skip includes

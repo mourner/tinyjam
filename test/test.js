@@ -1,17 +1,20 @@
 
-const {test} = require('tape');
-const dircompare = require('dir-compare');
-const rimraf = require('rimraf');
-const {join} = require('path');
+import {test} from 'tape';
+import dircompare from 'dir-compare';
+import rimraf from 'rimraf';
+import {join, dirname} from 'path';
+import {fileURLToPath} from 'url';
 
-const tinyjam = require('../index.js');
+import tinyjam from '../index.js';
+
+const fixturesDir = join(dirname(fileURLToPath(import.meta.url)), 'fixtures');
 
 test('example', t => testDir(t, '../../example', 'example_output'));
 test('test', t => testDir(t, 'test_input', 'test_output'));
 
 function testDir(t, input, expected) {
-    const inputPath = join(__dirname, 'fixtures', input);
-    const expectedPath = join(__dirname, 'fixtures', expected);
+    const inputPath = join(fixturesDir, input);
+    const expectedPath = join(fixturesDir, expected);
     const actualPath = `${expectedPath}_actual`;
 
     rimraf.sync(actualPath);

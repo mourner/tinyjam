@@ -2,6 +2,7 @@
   "name": "tinyjam",
   "description": "A zero-configuration static site generator that deliberately has no features",
   "main": "index.js",
+  "type": "module",
   "bin": {
     "tinyjam": "./cli.js"
   },
@@ -9,17 +10,17 @@
   "author": "Vladimir Agafonkin",
   "license": "ISC",
   "dependencies": {
-    "front-matter": "^3.1.0",
-    "js-yaml": "^3.13.1",
-    "marked": "^1.0.0",
+    "front-matter": "^4.0.2",
+    "js-yaml": "^4.0.0",
+    "marked": "^1.2.7",
     "yeahjs": "^0.2.0"
   },
   "devDependencies": {
-    "dir-compare": "^2.3.0",
-    "eslint": "^7.0.0",
+    "dir-compare": "^2.4.0",
+    "eslint": "^7.17.0",
     "eslint-config-mourner": "^3.0.0",
     "rimraf": "^3.0.2",
-    "tape": "^5.0.0"
+    "tape": "^5.1.1"
   },
   "scripts": {
     "pretest": "eslint *.js test/test.js",
@@ -28,12 +29,15 @@
   "eslintConfig": {
     "extends": "mourner",
     "parserOptions": {
-      "ecmaVersion": 2018
+      "ecmaVersion": 2020
     }
   },
   "files": [
     "cli.js"
   ],
+  "engines": {
+    "node": ">= 12.17.0"
+  },
   "keywords": [
     "static",
     "site",
