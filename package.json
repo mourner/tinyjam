@@ -13,12 +13,12 @@
   "dependencies": {
     "front-matter": "^4.0.2",
     "js-yaml": "^4.0.0",
-    "marked": "^1.2.7",
-    "yeahjs": "^0.2.0"
+    "marked": "^2.0.0",
+    "yeahjs": "^0.3.0"
   },
   "devDependencies": {
-    "dir-compare": "^2.4.0",
-    "eslint": "^7.17.0",
+    "dir-compare": "^3.0.0",
+    "eslint": "^7.19.0",
     "eslint-config-mourner": "^3.0.0",
     "rimraf": "^3.0.2",
     "tape": "^5.1.1"
