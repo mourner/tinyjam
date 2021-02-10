@@ -2,7 +2,6 @@ import fs from 'fs';
 import {join, basename, dirname, extname, relative} from 'path';
 
 import {compile} from 'yeahjs';
-import fm from 'front-matter';
 import marked from 'marked';
 import yaml from 'js-yaml';
 
@@ -103,10 +102,7 @@ export default function tinyjam(src, dest = src, options = {}) {
 
             if (ext === '.md') {
                 log(`read    ${shortPath}`);
-                const {attributes, body} = fm(fs.readFileSync(path, 'utf8'));
-
-                if (attributes.body !== undefined)
-                    throw new Error('Can\'t use reserved keyword "body" as a front matter property.');
+                const {body, attributes} = parseFrontMatter(fs.readFileSync(path, 'utf8'));
 
                 data[name] = createCtx(rootPath, {...attributes, body: marked(body, markedOptions)});
 
@@ -136,4 +132,21 @@ export default function tinyjam(src, dest = src, options = {}) {
             }
         }
     }
+}
+
+const fmOpen = '---';
+const fmClose = '\n---';
+
+function parseFrontMatter(str) {
+    if (str.indexOf(fmOpen) !== 0 || str[fmOpen.length] === fmOpen[0]) return {body: str};
+
+    let close = str.indexOf(fmClose, fmOpen.length);
+    if (close < 0) close = str.length;
+
+    const attributes = yaml.load(str.slice(0, close));
+    if (attributes.body !== undefined)
+        throw new Error('Can\'t use reserved keyword "body" as a front matter property.');
+
+    const body = str.slice(close + fmClose.length, str.length);
+    return {body, attributes};
 }
