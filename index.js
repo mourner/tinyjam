@@ -2,7 +2,7 @@ import fs from 'fs';
 import {join, basename, dirname, extname, relative} from 'path';
 
 import {compile} from 'yeahjs';
-import marked from 'marked';
+import {marked} from 'marked';
 import yaml from 'js-yaml';
 
 const defaultOptions = {
