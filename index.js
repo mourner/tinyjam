@@ -47,6 +47,7 @@ export default function tinyjam(src, dest = src, options = {}) {
 
     function render(ejs, filename, data, dir, name, ext) {
         const path = join(dir, name) + ext;
+        data.destPath = path;
         const template = compile(ejs, {
             locals: Object.keys(data).concat(['root', 'rootPath']),
             filename, read, resolve, cache
