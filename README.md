@@ -95,6 +95,7 @@ In addition to the collected data, templates have access to the following proper
 
 - `rootPath` is a relative path to the root of the project — useful as a prefix for links in includes as they may be used on different nesting levels (e.g. `<%= rootPath %>/index.css`).
 - `root` references all of the project's data, which is useful for accessing data in includes or outside of the current template's folder.
+- `destPath` is a relative path to the current output file, which is useful for canonical links (e.g. `<link rel="canonical" href="<%= root.data.baseUrl + '/' + destPath %>">`>).
 
 ### Command line
 
