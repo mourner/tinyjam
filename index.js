@@ -12,6 +12,8 @@ const defaultOptions = {
     highlight: null
 };
 
+let path;
+
 export default function tinyjam(src, dest = src, options = {}) {
     options = Object.assign({}, defaultOptions, options);
 
@@ -45,11 +47,18 @@ export default function tinyjam(src, dest = src, options = {}) {
         if (options.log) console.log(msg);
     }
 
+
     function render(ejs, filename, data, dir, name, ext) {
-        const path = join(dir, name) + ext;
-        data.destPath = path;
+        // Storing in global variable to access current in get function
+        path = join(dir, name) + ext;
+        if (!data.hasOwnProperty('destPath'))
+            Object.defineProperty(data, 'destPath', {
+                get() {
+                    return path.replace(/\\/g, '/');
+                }
+            });
         const template = compile(ejs, {
-            locals: Object.keys(data).concat(['root', 'rootPath']),
+            locals: Object.keys(data).concat(['root', 'rootPath', 'destPath']),
             filename, read, resolve, cache
         });
         log(`render  ${path}`);
