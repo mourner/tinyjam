@@ -158,7 +158,7 @@ There's no need for all that in a static website. If you do have a case for it, 
 ```ejs
 en.ejs: <%- include('_content.ejs', {lang: 'en'}) %>
 fr.ejs: <%- include('_content.ejs', {lang: 'fr'}) %>
-_content.ejs: <%= content[lang].body %> (use either content/en.md or content/fr.md)
+_content.ejs: <%= content[locals.lang].body %> (use either content/en.md or content/fr.md)
 ```
 
 #### How do I add pagination?
