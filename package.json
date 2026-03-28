@@ -11,15 +11,15 @@
   "author": "Vladimir Agafonkin",
   "license": "ISC",
   "dependencies": {
-    "marked": "^16.3.0",
-    "yaml": "^2.8.1",
-    "yeahjs": "^0.3.0"
+    "marked": "^17.0.5",
+    "yaml": "^2.8.3",
+    "yeahjs": "^0.3.1"
   },
   "devDependencies": {
     "dir-compare": "^5.0.0",
-    "eslint": "^9.36.0",
+    "eslint": "^10.1.0",
     "eslint-config-mourner": "^4.1.0",
-    "rimraf": "^6.0.1"
+    "rimraf": "^6.1.3"
   },
   "scripts": {
     "pretest": "eslint *.js test/test.js",
