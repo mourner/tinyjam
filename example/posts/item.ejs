@@ -4,6 +4,6 @@
 
 <h1><%= title %></h1>
 <%- body %>
-<p><em>Posted on <%= date.toDateString() %>.</em></p>
+<p><em>Posted on <%= new Date(date).toDateString() %>.</em></p>
 
 <%- include('../_footer.ejs') -%>

@@ -5,7 +5,7 @@
 <h1><%= data.title %></h1>
 
 <% for (const name of Object.keys(posts).reverse()) { const {date, title, body} = posts[name]; -%>
-    <h3><a href="posts/<%= name %>.html"><%= title %></a> — <%= date.toDateString() %></h3>
+    <h3><a href="posts/<%= name %>.html"><%= title %></a> — <%= new Date(date).toDateString() %></h3>
     <p><%- body.trim().match(/\<p>(.+)<\/p>/)[1] %> [&hellip;]</p>
 <% } -%>
 

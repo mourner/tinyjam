@@ -23,5 +23,5 @@ function testDir(input, expected) {
     tinyjam(inputPath, actualPath);
 
     const result = dircompare.compareSync(actualPath, expectedPath, {compareContent: true});
-    assert.ok(result.same, `folders different: ${result.diffSet.filter(r => r.reason)}`);
+    assert.ok(result.same, `folders different: ${JSON.stringify(result.diffSet.filter(r => r.reason), null, 2)}`);
 }

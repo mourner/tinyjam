@@ -3,7 +3,7 @@ import {join, basename, dirname, extname, relative} from 'path';
 
 import {compile} from 'yeahjs';
 import {marked} from 'marked';
-import * as yaml from 'yaml';
+import {parse as parseYaml} from '@mourner/yeahml';
 
 const defaultOptions = {
     log: false,
@@ -136,10 +136,6 @@ export default function tinyjam(src, dest = src, options = {}) {
 
 const fmOpen = '---';
 const fmClose = '\n---';
-
-function parseYaml(str) {
-    return yaml.parse(str, {customTags: ['timestamp']});
-}
 
 function parseFrontMatter(str) {
     if (str.indexOf(fmOpen) !== 0 || str[fmOpen.length] === fmOpen[0]) return {body: str};

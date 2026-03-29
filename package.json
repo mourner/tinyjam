@@ -8,11 +8,11 @@
     "tinyjam": "./cli.js"
   },
   "version": "0.4.0",
-  "author": "Vladimir Agafonkin",
+  "author": "Volodymyr Agafonkin",
   "license": "ISC",
   "dependencies": {
+    "@mourner/yeahml": "^1.0.0",
     "marked": "^17.0.5",
-    "yaml": "^2.8.3",
     "yeahjs": "^0.3.1"
   },
   "devDependencies": {

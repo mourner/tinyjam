@@ -41,7 +41,7 @@ An example template:
 <%- include('_header.ejs') %>
 
 <% for (const [name, {date, title}] of Object.entries(posts)) { %>
-    <h3><%= date.toDateString() %>: <a href="posts/<%= name %>.html"><%= title %></a></h3>
+    <h3><%= new Date(date).toDateString() %>: <a href="posts/<%= name %>.html"><%= title %></a></h3>
 <% } %>
 ```
 
@@ -141,7 +141,7 @@ Sorry — probably not, unless it fits the concept of a minimal, zero-configurat
 
 #### How fast is Tinyjam?
 
-Pretty fast. I didn't see a point in benchmarking because most of the time is spent parsing Markdown/YAML and rendering EJS anyway, but corresponding dependencies (`marked`, `js-yaml`, `yeahjs`) are very well optimized.
+Pretty fast. I didn't see a point in benchmarking because most of the time is spent parsing Markdown/YAML and rendering EJS anyway, but corresponding dependencies (`marked`, `@mourner/yeahml`, `yeahjs`) are very well optimized.
 
 #### Why EJS for templating, and can I use another templating system?
 
