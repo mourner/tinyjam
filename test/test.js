@@ -1,4 +1,6 @@
 
+import fs from 'fs';
+import os from 'os';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import dircompare from 'dir-compare';
@@ -12,6 +14,18 @@ const fixturesDir = join(dirname(fileURLToPath(import.meta.url)), 'fixtures');
 
 test('example', () => testDir('../../example', 'example_output'));
 test('test', () => testDir('test_input', 'test_output'));
+
+test('front matter with a UTF-8 BOM', () => {
+    const src = fs.mkdtempSync(join(os.tmpdir(), 'tinyjam-'));
+    const dest = fs.mkdtempSync(join(os.tmpdir(), 'tinyjam-'));
+    fs.writeFileSync(join(src, 'about.md'), '\uFEFF---\ntitle: Hello\n---\nWorld.\n');
+    fs.writeFileSync(join(src, 'index.ejs'), 'TITLE:<%= about.title %>\nBODY:<%- about.body %>');
+    tinyjam(src, dest);
+    const html = fs.readFileSync(join(dest, 'index.html'), 'utf8');
+    assert.equal(html, 'TITLE:Hello\nBODY:<p>World.</p>\n');
+    rimraf.sync(src);
+    rimraf.sync(dest);
+});
 
 function testDir(input, expected) {
     const inputPath = join(fixturesDir, input);

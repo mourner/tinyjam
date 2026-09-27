@@ -138,6 +138,8 @@ const fmOpen = '---';
 const fmClose = '\n---';
 
 function parseFrontMatter(str) {
+    // A leading BOM is not content. It pushed the opening fence off column 0.
+    if (str.charCodeAt(0) === 0xFEFF) str = str.slice(1);
     if (str.indexOf(fmOpen) !== 0 || str[fmOpen.length] === fmOpen[0]) return {body: str};
 
     let close = str.indexOf(fmClose, fmOpen.length);
