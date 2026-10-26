@@ -45,7 +45,7 @@ export default function tinyjam(src, dest = src, options = {}) {
     function render(ejs, filename, data, dir, name, ext) {
         const path = join(dir, name) + ext;
         const template = compile(ejs, {
-            locals: Object.keys(data).concat(['root', 'rootPath']),
+            locals: [...new Set(Object.keys(data).filter(isLocal).concat(['root', 'rootPath']))],
             filename, read, resolve, cache
         });
         log(`render  ${path}`);
@@ -129,6 +129,18 @@ export default function tinyjam(src, dest = src, options = {}) {
             }
         }
     }
+}
+
+// data keys that can't be template variables (they stay reachable as `locals[key]`): non-identifiers,
+// strict mode reserved words, and names yeahjs uses in compiled templates
+const identRe = /^[\p{ID_Start}$_][\p{ID_Continue}$‌‍]*$/u;
+const reserved = new Set(('break case catch class const continue debugger default delete do else enum export extends ' +
+    'false finally for function if import in instanceof new null return super switch this throw true try typeof var ' +
+    'void while with yield let static implements interface package private protected public await eval arguments ' +
+    'locals _esc _str _out').split(' '));
+
+function isLocal(key) {
+    return identRe.test(key) && !reserved.has(key);
 }
 
 const fmOpen = '---';

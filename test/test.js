@@ -27,6 +27,17 @@ test('front matter with a UTF-8 BOM', () => {
     rimraf.sync(dest);
 });
 
+test('front matter keys that are not valid template variables', () => {
+    const src = fs.mkdtempSync(join(os.tmpdir(), 'tinyjam-'));
+    const dest = fs.mkdtempSync(join(os.tmpdir(), 'tinyjam-'));
+    fs.writeFileSync(join(src, 'a.md'), '---\nauthor-url: http://a\nclass: x\n_out: y\nroot: z\nnaïve: w\n---\n');
+    fs.writeFileSync(join(src, 'item.ejs'), '<%= locals["author-url"] %> <%= locals.class %> <%= locals._out %> <%= root %> <%= naïve %>');
+    tinyjam(src, dest);
+    assert.equal(fs.readFileSync(join(dest, 'a.html'), 'utf8'), 'http://a x y z w');
+    rimraf.sync(src);
+    rimraf.sync(dest);
+});
+
 function testDir(input, expected) {
     const inputPath = join(fixturesDir, input);
     const expectedPath = join(fixturesDir, expected);
