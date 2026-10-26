@@ -2,18 +2,25 @@
 
 import tinyjam from './index.js';
 import {readFileSync} from 'fs';
-import {performance} from 'perf_hooks';
+import {parseArgs} from 'util';
 
 const version = JSON.parse(readFileSync(new URL('./package.json', import.meta.url))).version;
+const usage = 'usage: tinyjam source_dir [output_dir] [--breaks] [--silent]';
 
-if (process.argv.length < 3) {
+const {values: {breaks, silent}, positionals: [src, out]} = parseArgs({
+    options: {
+        breaks: {type: 'boolean', default: false},
+        silent: {type: 'boolean', default: false}
+    },
+    allowPositionals: true
+});
+
+if (!src) {
     console.log(`tinyjam v${version}`);
-    console.log('usage: tinyjam source_dir [output_dir] [--breaks] [--silent]');
+    console.log(usage);
 
 } else {
-    const [src, out] = process.argv.slice(2).filter(s => !s.startsWith('--'));
-    const breaks = process.argv.includes('--breaks');
-    const log = !process.argv.includes('--silent');
+    const log = !silent;
 
     if (log) console.log(`tinyjam v${version}\n`);
 
