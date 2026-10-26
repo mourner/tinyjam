@@ -32,7 +32,7 @@ export default function tinyjam(src, dest = src, options = {}) {
     for (const {ejs, path, data, dir, name, ext, isCollection} of templates) {
         if (isCollection) {
             for (const key of Object.keys(data)) {
-                if (!dirs.has(data[key])) render(ejs, path, data[key], dir, key, ext);
+                if (key[0] !== '_' && !dirs.has(data[key])) render(ejs, path, data[key], dir, key, ext);
             }
         } else {
             render(ejs, path, data, dir, name, ext);
@@ -70,8 +70,9 @@ export default function tinyjam(src, dest = src, options = {}) {
         return ctx;
     }
 
-    // recursively walk through and process files inside the source directory
-    function walk(dir, data) {
+    // recursively walk through and process files inside the source directory;
+    // `_`-prefixed files and folders are source only: their data is read, but nothing is output from them
+    function walk(dir, data, sourceOnly = false) {
         const files = fs.readdirSync(dir);
 
         for (const file of files) {
@@ -90,12 +91,13 @@ export default function tinyjam(src, dest = src, options = {}) {
             }
 
             const stats = fs.lstatSync(path);
+            const hidden = sourceOnly || file[0] === '_';
 
             if (stats.isDirectory()) {
-                fs.mkdirSync(destPath, {recursive: true});
+                if (!hidden) fs.mkdirSync(destPath, {recursive: true});
                 data[file] = createCtx(join(rootPath, '..'));
                 dirs.add(data[file]);
-                walk(path, data[file]);
+                walk(path, data[file], hidden);
                 continue;
             }
 
@@ -109,11 +111,10 @@ export default function tinyjam(src, dest = src, options = {}) {
                 log(`read    ${shortPath}`);
                 data[name] = createCtx(rootPath, parseYaml(fs.readFileSync(path, 'utf8')));
 
+            } else if (hidden) {
+                log(`skip    ${shortPath}`);
+
             } else if (ext === '.ejs') {
-                if (name[0] === '_') { // skip includes
-                    log(`skip    ${shortPath}`);
-                    continue;
-                }
                 log(`compile ${shortPath}`);
                 templates.push({
                     data,

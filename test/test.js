@@ -52,6 +52,24 @@ test('item.ejs skips subfolders', () => {
     rimraf.sync(dest);
 });
 
+test('_-prefixed files and folders are source only', () => {
+    const src = fs.mkdtempSync(join(os.tmpdir(), 'tinyjam-'));
+    const dest = fs.mkdtempSync(join(os.tmpdir(), 'tinyjam-'));
+    fs.mkdirSync(join(src, '_lib', 'sub'), {recursive: true});
+    fs.writeFileSync(join(src, '_lib', 'part.html'), '');
+    fs.writeFileSync(join(src, '_lib', 'page.ejs'), '');
+    fs.writeFileSync(join(src, '_lib', 'sub', 'authors.yml'), 'name: Vlad');
+    fs.writeFileSync(join(src, '_logo.png'), '');
+    fs.writeFileSync(join(src, '_draft.md'), '---\ntitle: Draft\n---\n');
+    fs.writeFileSync(join(src, 'post.md'), '---\ntitle: Post\n---\n');
+    fs.writeFileSync(join(src, 'item.ejs'), '<%= title %> <%= root._lib.sub.authors.name %> <%= root._draft.title %>');
+    tinyjam(src, dest);
+    assert.deepEqual(fs.readdirSync(dest), ['post.html']);
+    assert.equal(fs.readFileSync(join(dest, 'post.html'), 'utf8'), 'Post Vlad Draft');
+    rimraf.sync(src);
+    rimraf.sync(dest);
+});
+
 function testDir(input, expected) {
     const inputPath = join(fixturesDir, input);
     const expectedPath = join(fixturesDir, expected);

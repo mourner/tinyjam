@@ -88,7 +88,7 @@ Markdown is rendered according to the [GitHub Flavored Markdown](https://github.
 
 - `<filename>.ejs` files are rendered as `<filename>.html`.
 - `item.ejs` has a special meaning: all _data files_ in the same folder (e.g. `<filename>.md`) are rendered with this template as `<filename>.html` with the corresponding file's data.
-- Templates starting with `_` (e.g. `_header.ejs`) are skipped (to be used as EJS includes).
+- Files and folders starting with `_` (e.g. `_header.ejs`, `_partials/`, `_draft.md`) are source only: templates are not rendered (use them as EJS includes) and other files are not copied, but their Markdown and YAML data is still available (e.g. `root._authors`).
 - Templates are rendered as `html` by default, but you can use other extensions, e.g. `main.css.ejs` will be rendered as `main.css`.
 
 In addition to the collected data, templates have access to the following properties:
