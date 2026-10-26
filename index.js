@@ -7,17 +7,14 @@ import {parse as parseYaml} from '@mourner/yeahml';
 
 const defaultOptions = {
     log: false,
-    breaks: false,
-    smartypants: false,
-    highlight: null
+    breaks: false
 };
 
 export default function tinyjam(src, dest = src, options = {}) {
     options = Object.assign({}, defaultOptions, options);
 
     // Markdown renderer options
-    const {breaks, smartypants, highlight} = options;
-    const markedOptions = {breaks, smartypants, highlight, smartLists: true};
+    const markedOptions = {breaks: options.breaks};
 
     const proto = {};
     const root = createCtx('.'); // root data object

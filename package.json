@@ -29,7 +29,7 @@
     "cli.js"
   ],
   "engines": {
-    "node": ">= 12.17.0"
+    "node": ">= 20"
   },
   "keywords": [
     "static",

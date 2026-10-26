@@ -4,8 +4,8 @@
 
 A bare-bones, zero-configuration **static site generator** that deliberately has **no features**, an experiment in radical simplicity. Essentially a tiny, elegant glue between [EJS templates](https://github.com/mourner/yeahjs) and [Markdown](https://github.github.com/gfm/) with freeform structure (enabling incremental adoption) and convenient defaults, written in under 120 lines of JavaScript.
 
-[![Build Status](https://github.com/mourner/tinyjam/workflows/Node/badge.svg)](https://github.com/mourner/tinyjam/actions)
-[![Install Size](https://packagephobia.com/badge?p=tinyjam)](https://packagephobia.com/result?p=tinyjam)
+[![Build Status](https://github.com/mourner/tinyjam/actions/workflows/node.yml/badge.svg)](https://github.com/mourner/tinyjam/actions)
+[![Install Size](https://badgen.net/packagephobia/install/tinyjam)](https://packagephobia.com/result?p=tinyjam)
 [![Simply Awesome](https://img.shields.io/badge/simply-awesome-brightgreen.svg)](https://github.com/mourner/projects)
 
 - [Example](#example)
@@ -101,11 +101,10 @@ In addition to the collected data, templates have access to the following proper
 Install with NPM to use `tinyjam` as a CLI: `npm install -g tinyjam`. Usage:
 
 ```
-tinyjam source_dir [output_dir] [--breaks] [--smartypants] [--silent]
+tinyjam source_dir [output_dir] [--breaks] [--silent]
 ```
 
 - `--breaks`: Add single line breaks as `<br>` in Markdown.
-- `--smartypants`: Convert quotes, dashes and ellipses in Markdown to typographic equivalents.
 - `--silent`: Run silently (unless there's an error).
 
 If `output_dir` is not provided, it's assumed equal to `source_dir`. This is useful for incrementally converting static sites without changing deployment folders.
@@ -116,14 +115,14 @@ If `output_dir` is not provided, it's assumed equal to `source_dir`. This is use
 import tinyjam from 'tinyjam';
 
 tinyjam(sourceDir, outputDir, {
-    log: false,         // log the progress (like in the CLI)
-    breaks: false,      // Markdown: add single line breaks (like in GitHub comments)
-    smartypants: false, // Markdown: convert quotes, dashes and ellipses to typographic equivalents
-    highlight: null     // a code highlighting function: (code, lang) => html
+    log: false,   // log the progress (like in the CLI)
+    breaks: false // Markdown: add single line breaks (like in GitHub comments)
 });
-````
+```
 
-Note that the project only supports Node v12.17+.
+Markdown is rendered with [marked](https://marked.js.org/), so you can configure it further (e.g. with [extensions](https://marked.js.org/using_advanced#extensions)) by calling `marked.use(...)` before running `tinyjam`.
+
+Note that the project only supports Node v20+.
 
 ## FAQ
 
@@ -171,13 +170,20 @@ Do all the preprocessing in the source directory prior to running `tinyjam`.
 
 #### How do I add code syntax highlighting?
 
-Here's an example using the `tinyjam` API with [highlight.js](https://highlightjs.org/):
+Here's an example using the `tinyjam` API with [highlight.js](https://highlightjs.org/) and [marked-highlight](https://github.com/markedjs/marked-highlight):
 
 ```js
 import tinyjam from 'tinyjam';
-import {highlight} from 'highlight.js';
+import {marked} from 'marked';
+import {markedHighlight} from 'marked-highlight';
+import hljs from 'highlight.js';
 
-tinyjam(sourceDir, outputDir, {
-    highlight: (code, lang) => highlight(lang, code).value
-});
+marked.use(markedHighlight({
+    langPrefix: 'hljs language-',
+    highlight: (code, lang) => hljs.highlight(code, {language: hljs.getLanguage(lang) ? lang : 'plaintext'}).value
+}));
+
+tinyjam(sourceDir, outputDir);
 ```
+
+Similarly, you can add typographic quotes and dashes with [marked-smartypants](https://github.com/markedjs/marked-smartypants).
