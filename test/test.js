@@ -74,6 +74,28 @@ test('_-prefixed files and folders are source only', () => {
     rimraf.sync(dest);
 });
 
+test('data name clashes throw', () => {
+    const src = fs.mkdtempSync(join(os.tmpdir(), 'tinyjam-'));
+    const dest = fs.mkdtempSync(join(os.tmpdir(), 'tinyjam-'));
+    fs.mkdirSync(join(src, 'posts'));
+    fs.writeFileSync(join(src, 'posts.md'), 'Intro');
+    assert.throws(() => tinyjam(src, dest), /Both posts and posts\.md map to the data key "posts"/);
+    rimraf.sync(src);
+    rimraf.sync(dest);
+});
+
+test('data is read-only in templates', () => {
+    const src = fs.mkdtempSync(join(os.tmpdir(), 'tinyjam-'));
+    const dest = fs.mkdtempSync(join(os.tmpdir(), 'tinyjam-'));
+    fs.writeFileSync(join(src, 'post.md'), '---\ntags:\n  - b\n  - a\n---\n');
+    fs.writeFileSync(join(src, 'a.ejs'), '<%= post.tags.toSorted() %>');
+    fs.writeFileSync(join(src, 'b.ejs'), '<% post.tags.sort() %>');
+    assert.throws(() => tinyjam(src, dest), /read only/);
+    assert.equal(fs.readFileSync(join(dest, 'a.html'), 'utf8'), 'a,b');
+    rimraf.sync(src);
+    rimraf.sync(dest);
+});
+
 async function testDir(t, input, expected) {
     const inputPath = join(fixturesDir, input);
     const expectedPath = join(fixturesDir, expected);

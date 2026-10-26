@@ -28,6 +28,10 @@ export default function tinyjam(src, dest = src, options = {}) {
 
     walk(src, root); // process files, collect data and templates to render
 
+    // shared by all templates, so make sure one can't change what the others see (deep freezing is cheap: ~5ms for 10k pages)
+    deepFreeze(root);
+    Object.freeze(proto);
+
     // render templates; we do it later to make sure all data is collected first
     for (const {ejs, path, data, dir, name, ext, isCollection} of templates) {
         if (isCollection) {
@@ -73,7 +77,15 @@ export default function tinyjam(src, dest = src, options = {}) {
     // recursively walk through and process files inside the source directory;
     // `_`-prefixed files and folders are source only: their data is read, but nothing is output from them
     function walk(dir, data, sourceOnly = false) {
-        const files = fs.readdirSync(dir);
+        const files = fs.readdirSync(dir).sort(); // readdir order differs between platforms
+        const sources = new Map(); // data key -> source path, to catch clashes like posts.md next to posts/
+
+        function add(key, value, shortPath) {
+            if (sources.has(key)) throw new Error(`Both ${sources.get(key)} and ${shortPath} map to the data key "${key}".`);
+            sources.set(key, shortPath);
+            data[key] = value;
+            return value;
+        }
 
         for (const file of files) {
             const path = join(dir, file);
@@ -95,8 +107,7 @@ export default function tinyjam(src, dest = src, options = {}) {
 
             if (stats.isDirectory()) {
                 if (!hidden) fs.mkdirSync(destPath, {recursive: true});
-                data[file] = createCtx(join(rootPath, '..'));
-                walk(path, data[file], hidden);
+                walk(path, add(file, createCtx(join(rootPath, '..')), shortPath), hidden);
                 continue;
             }
 
@@ -104,12 +115,11 @@ export default function tinyjam(src, dest = src, options = {}) {
                 log(`read    ${shortPath}`);
                 const {body, attributes} = parseFrontMatter(fs.readFileSync(path, 'utf8'));
 
-                data[name] = createCtx(rootPath, {...attributes, body: marked(body, markedOptions)});
-                pages.add(data[name]);
+                pages.add(add(name, createCtx(rootPath, {...attributes, body: marked(body, markedOptions)}), shortPath));
 
             } else if (ext === '.yml' || ext === '.yaml') {
                 log(`read    ${shortPath}`);
-                data[name] = createCtx(rootPath, parseYaml(fs.readFileSync(path, 'utf8')));
+                add(name, createCtx(rootPath, parseYaml(fs.readFileSync(path, 'utf8'))), shortPath);
 
             } else if (hidden) {
                 log(`skip    ${shortPath}`);
@@ -144,6 +154,13 @@ const reserved = new Set(('break case catch class const continue debugger defaul
 
 function isLocal(key) {
     return identRe.test(key) && !reserved.has(key);
+}
+
+function deepFreeze(obj) {
+    for (const value of Object.values(obj)) {
+        if (typeof value === 'object' && value !== null && !Object.isFrozen(value)) deepFreeze(value);
+    }
+    return Object.freeze(obj);
 }
 
 const fmOpen = '---';

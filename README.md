@@ -82,6 +82,10 @@ about: {body: "This is an awesome blog about me."}
 
 Markdown is rendered according to the [GitHub Flavored Markdown](https://github.github.com/gfm/) specification.
 
+Keys are in alphabetical order of file names (except that, as always in JavaScript, integer-like keys such as `2024` come first in numeric order). Files or folders that map to the same key (e.g. `posts.md` next to `posts/`, or `foo.md` next to `foo.yml`) are an error.
+
+Data is read-only, since it's shared by all templates: use non-mutating methods like `toSorted()` instead of `sort()`.
+
 ### Templates
 
 **Tinyjam** uses EJS (through [yeahjs](https://github.com/mourner/yeahjs), a fast EJS subset), a templating system where you can use plain JavaScript, so it's both powerful and easy to learn. All `*.ejs` files it encounters are rendered with the collected data in the following way:
