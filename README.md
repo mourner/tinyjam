@@ -4,8 +4,8 @@
 
 A bare-bones, zero-configuration **static site generator** that deliberately has **no features**, an experiment in radical simplicity. Essentially a tiny, elegant glue between [EJS templates](https://github.com/mourner/yeahjs) and [Markdown](https://github.github.com/gfm/) with freeform structure (enabling incremental adoption) and convenient defaults, written in under 120 lines of JavaScript.
 
-[![Build Status](https://github.com/mourner/tinyjam/workflows/Node/badge.svg?branch=master)](https://github.com/mourner/tinyjam/actions)
-[![Install Size](https://packagephobia.now.sh/badge?p=tinyjam)](https://packagephobia.now.sh/result?p=tinyjam)
+[![Build Status](https://github.com/mourner/tinyjam/workflows/Node/badge.svg)](https://github.com/mourner/tinyjam/actions)
+[![Install Size](https://packagephobia.com/badge?p=tinyjam)](https://packagephobia.com/result?p=tinyjam)
 [![Simply Awesome](https://img.shields.io/badge/simply-awesome-brightgreen.svg)](https://github.com/mourner/projects)
 
 - [Example](#example)
