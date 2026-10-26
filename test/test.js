@@ -38,6 +38,20 @@ test('front matter keys that are not valid template variables', () => {
     rimraf.sync(dest);
 });
 
+test('item.ejs skips subfolders', () => {
+    const src = fs.mkdtempSync(join(os.tmpdir(), 'tinyjam-'));
+    const dest = fs.mkdtempSync(join(os.tmpdir(), 'tinyjam-'));
+    fs.mkdirSync(join(src, 'img'));
+    fs.writeFileSync(join(src, 'img', 'a.png'), '');
+    fs.writeFileSync(join(src, 'post.md'), '---\ntitle: Post\n---\n');
+    fs.writeFileSync(join(src, 'item.ejs'), '<%= title.toUpperCase() %>');
+    tinyjam(src, dest);
+    assert.equal(fs.readFileSync(join(dest, 'post.html'), 'utf8'), 'POST');
+    assert.ok(!fs.existsSync(join(dest, 'img.html')));
+    rimraf.sync(src);
+    rimraf.sync(dest);
+});
+
 function testDir(input, expected) {
     const inputPath = join(fixturesDir, input);
     const expectedPath = join(fixturesDir, expected);

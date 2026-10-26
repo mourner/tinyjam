@@ -21,6 +21,7 @@ export default function tinyjam(src, dest = src, options = {}) {
     proto.root = root; // add data root access to all leaf nodes
 
     const templates = [];
+    const dirs = new WeakSet(); // folder data objects, which aren't collection items
     const cache = {}; // include cache
 
     fs.mkdirSync(dest, {recursive: true}); // make sure destination exists
@@ -31,7 +32,7 @@ export default function tinyjam(src, dest = src, options = {}) {
     for (const {ejs, path, data, dir, name, ext, isCollection} of templates) {
         if (isCollection) {
             for (const key of Object.keys(data)) {
-                render(ejs, path, data[key], dir, key, ext);
+                if (!dirs.has(data[key])) render(ejs, path, data[key], dir, key, ext);
             }
         } else {
             render(ejs, path, data, dir, name, ext);
@@ -93,6 +94,7 @@ export default function tinyjam(src, dest = src, options = {}) {
             if (stats.isDirectory()) {
                 fs.mkdirSync(destPath, {recursive: true});
                 data[file] = createCtx(join(rootPath, '..'));
+                dirs.add(data[file]);
                 walk(path, data[file]);
                 continue;
             }
