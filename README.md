@@ -24,7 +24,7 @@ A bare-bones, zero-configuration **static site generator** that deliberately has
 ├── posts
 │   ├── 01.md
 │   ├── 02.md
-│   └── item.ejs
+│   └── %.ejs
 ├── _header.ejs
 └── index.ejs
 
@@ -87,7 +87,7 @@ Markdown is rendered according to the [GitHub Flavored Markdown](https://github.
 **Tinyjam** uses EJS (through [yeahjs](https://github.com/mourner/yeahjs), a fast EJS subset), a templating system where you can use plain JavaScript, so it's both powerful and easy to learn. All `*.ejs` files it encounters are rendered with the collected data in the following way:
 
 - `<filename>.ejs` files are rendered as `<filename>.html`.
-- `item.ejs` has a special meaning: all _data files_ in the same folder (e.g. `<filename>.md`) are rendered with this template as `<filename>.html` with the corresponding file's data.
+- `%.ejs` renders every _data file_ in the same folder (e.g. `<filename>.md`) as `<filename>.html` with the corresponding file's data. It works with other extensions too, e.g. `%.json.ejs` renders `<filename>.json`.
 - Files and folders starting with `_` (e.g. `_header.ejs`, `_partials/`, `_draft.md`) are source only: templates are not rendered (use them as EJS includes) and other files are not copied, but their Markdown and YAML data is still available (e.g. `root._authors`).
 - Templates are rendered as `html` by default, but you can use other extensions, e.g. `main.css.ejs` will be rendered as `main.css`.
 

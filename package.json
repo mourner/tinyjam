@@ -12,11 +12,10 @@
   "license": "ISC",
   "dependencies": {
     "@mourner/yeahml": "^1.0.1",
-    "marked": "^18.1.1",
+    "marked": "^18.1.2",
     "yeahjs": "^0.4.1"
   },
   "devDependencies": {
-    "dir-compare": "^5.0.0",
     "eslint": "^10.13.0",
     "eslint-config-mourner": "^5.0.2",
     "rimraf": "^6.1.3"

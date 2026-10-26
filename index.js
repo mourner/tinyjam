@@ -31,8 +31,8 @@ export default function tinyjam(src, dest = src, options = {}) {
     // render templates; we do it later to make sure all data is collected first
     for (const {ejs, path, data, dir, name, ext, isCollection} of templates) {
         if (isCollection) {
-            for (const key of Object.keys(data)) {
-                if (key[0] !== '_' && !dirs.has(data[key])) render(ejs, path, data[key], dir, key, ext);
+            for (const key of Object.keys(data)) { // name is `%` plus an optional output extension
+                if (key[0] !== '_' && !dirs.has(data[key])) render(ejs, path, data[key], dir, key + name.slice(1), ext);
             }
         } else {
             render(ejs, path, data, dir, name, ext);
@@ -121,7 +121,7 @@ export default function tinyjam(src, dest = src, options = {}) {
                     name,
                     path,
                     ejs: fs.readFileSync(path, 'utf8'),
-                    isCollection: name === 'item',
+                    isCollection: basename(name, extname(name)) === '%',
                     dir: dirname(shortPath),
                     ext: extname(name) ? '' : '.html'
                 });
