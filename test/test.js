@@ -39,18 +39,19 @@ test('front matter keys that are not valid template variables', () => {
     rimraf.sync(dest);
 });
 
-test('%.ejs renders each data file, skipping subfolders', () => {
+test('%.ejs renders each Markdown file, skipping data and subfolders', () => {
     const src = fs.mkdtempSync(join(os.tmpdir(), 'tinyjam-'));
     const dest = fs.mkdtempSync(join(os.tmpdir(), 'tinyjam-'));
     fs.mkdirSync(join(src, 'img'));
     fs.writeFileSync(join(src, 'img', 'a.png'), '');
     fs.writeFileSync(join(src, 'post.md'), '---\ntitle: Post\n---\n');
+    fs.writeFileSync(join(src, 'data.yml'), 'author: Me');
     fs.writeFileSync(join(src, '%.ejs'), '<%= title.toUpperCase() %>');
     fs.writeFileSync(join(src, '%.json.ejs'), '{"title": "<%= title %>"}');
     tinyjam(src, dest);
     assert.equal(fs.readFileSync(join(dest, 'post.html'), 'utf8'), 'POST');
     assert.equal(fs.readFileSync(join(dest, 'post.json'), 'utf8'), '{"title": "Post"}');
-    assert.ok(!fs.existsSync(join(dest, 'img.html')));
+    assert.deepEqual(fs.readdirSync(dest).sort(), ['img', 'post.html', 'post.json']);
     rimraf.sync(src);
     rimraf.sync(dest);
 });

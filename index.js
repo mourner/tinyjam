@@ -21,7 +21,7 @@ export default function tinyjam(src, dest = src, options = {}) {
     proto.root = root; // add data root access to all leaf nodes
 
     const templates = [];
-    const dirs = new WeakSet(); // folder data objects, which aren't collection items
+    const pages = new WeakSet(); // Markdown data objects, the only ones `%` templates render
     const cache = {}; // include cache
 
     fs.mkdirSync(dest, {recursive: true}); // make sure destination exists
@@ -32,7 +32,7 @@ export default function tinyjam(src, dest = src, options = {}) {
     for (const {ejs, path, data, dir, name, ext, isCollection} of templates) {
         if (isCollection) {
             for (const key of Object.keys(data)) { // name is `%` plus an optional output extension
-                if (key[0] !== '_' && !dirs.has(data[key])) render(ejs, path, data[key], dir, key + name.slice(1), ext);
+                if (key[0] !== '_' && pages.has(data[key])) render(ejs, path, data[key], dir, key + name.slice(1), ext);
             }
         } else {
             render(ejs, path, data, dir, name, ext);
@@ -96,7 +96,6 @@ export default function tinyjam(src, dest = src, options = {}) {
             if (stats.isDirectory()) {
                 if (!hidden) fs.mkdirSync(destPath, {recursive: true});
                 data[file] = createCtx(join(rootPath, '..'));
-                dirs.add(data[file]);
                 walk(path, data[file], hidden);
                 continue;
             }
@@ -106,6 +105,7 @@ export default function tinyjam(src, dest = src, options = {}) {
                 const {body, attributes} = parseFrontMatter(fs.readFileSync(path, 'utf8'));
 
                 data[name] = createCtx(rootPath, {...attributes, body: marked(body, markedOptions)});
+                pages.add(data[name]);
 
             } else if (ext === '.yml' || ext === '.yaml') {
                 log(`read    ${shortPath}`);
